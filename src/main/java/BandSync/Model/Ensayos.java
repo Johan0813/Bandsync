@@ -9,18 +9,26 @@ import java.time.LocalDate;
 public class Ensayos {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-
+    @Column(name = "id", nullable = false)
     private Integer id;
+    @Column(name = "fecha", nullable = false)
     private LocalDate date;
+    @Column(name = "seccion", nullable = false)
     private String section;
+    @ManyToOne
+    @JoinColumn(name = "id_integrante", nullable = false, foreignKey = @ForeignKey(name = "fk_ensayo_integrante"))
+    private Integrantes integrante;
+    @Column(name = "asistencia", nullable = false, length = 20)
+    private String asistencia;
 
     public Ensayos() {
     }
 
-    public Ensayos(Integer id, LocalDate date, String section) {
-        this.id = id;
+    public Ensayos(LocalDate date, String section, Integrantes integrante, String asistencia) {
         this.date = date;
         this.section = section;
+        this.integrante = integrante;
+        this.asistencia = asistencia;
     }
 
     public Integer getId() {
@@ -45,5 +53,21 @@ public class Ensayos {
 
     public void setSection(String section) {
         this.section = section;
+    }
+
+    public Integrantes getIntegrante() {
+        return integrante;
+    }
+
+    public void setIntegrante(Integrantes integrante) {
+        this.integrante = integrante;
+    }
+
+    public String getAsistencia() {
+        return asistencia;
+    }
+
+    public void setAsistencia(String asistencia) {
+        this.asistencia = asistencia;
     }
 }
