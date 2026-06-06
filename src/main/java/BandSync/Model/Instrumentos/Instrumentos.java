@@ -9,16 +9,20 @@ public class Instrumentos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id", nullable = false)
     private Integer id;
-    private String type;
+    @Column(name = "nombre", nullable = false, length = 50)
+    private String name;
+    @Column(name = "condicion", nullable = false, length = 50)
     private String condition;
+    @Column(name = "disponibilidad", nullable = false, length = 50)
     private String availability;
 
     public Instrumentos() {
     }
 
-    public Instrumentos(String type, String condition, String availability) {
-        this.type = type;
+    public Instrumentos(String name, String condition, String availability) {
+        this.name = name;
         this.condition = condition;
         this.availability = availability;
     }
@@ -31,12 +35,12 @@ public class Instrumentos {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCondition() {

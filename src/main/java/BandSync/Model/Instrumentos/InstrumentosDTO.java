@@ -1,25 +1,25 @@
 package BandSync.Model.Instrumentos;
 
 public class InstrumentosDTO {
-    private String type;
+    private String name;
     private String condition;
     private String availability;
 
     public InstrumentosDTO() {
     }
 
-    public InstrumentosDTO(String type, String condition, String availability) {
-        this.type = type;
+    public InstrumentosDTO(String name, String condition, String availability) {
+        this.name = name;
         this.condition = condition;
         this.availability = availability;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCondition() {
