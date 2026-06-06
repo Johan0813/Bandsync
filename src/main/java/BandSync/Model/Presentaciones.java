@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-public class Presentaciones {
-
     @Entity
     @Table(name = "tb_presentaciones")
     public class Presentaciones {
