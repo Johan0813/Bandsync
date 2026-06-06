@@ -1,4 +1,4 @@
-package BandSync.Model;
+package BandSync.Model.Ensayos;
 
 import java.time.LocalDate;
 
