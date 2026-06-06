@@ -1,4 +1,4 @@
-package BandSync.Model;
+package BandSync.Model.Presentaciones;
 
 import BandSync.Model.Integrantes.Integrantes;
 import jakarta.persistence.*;
