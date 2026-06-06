@@ -1,5 +1,6 @@
 package BandSync.Model.Ensayos;
 
+import BandSync.Model.Integrantes.Integrantes;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
