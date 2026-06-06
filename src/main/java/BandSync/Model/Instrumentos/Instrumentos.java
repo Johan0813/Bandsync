@@ -10,7 +10,6 @@ public class Instrumentos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String type;
     private String condition;
     private String availability;
