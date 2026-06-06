@@ -1,4 +1,7 @@
 package BandSync.Repository.Presentaciones;
 
-public interface PresentacionesRepository {
+import BandSync.Model.Presentaciones.Presentaciones;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PresentacionesRepository extends JpaRepository <Presentaciones, Integer> {
 }
