@@ -1,8 +1,7 @@
 package BandSync.Model.Integrantes;
 import BandSync.Model.Instrumentos.Instrumentos;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "tb_Integrantes")
@@ -15,7 +14,19 @@ public class Integrantes {
     @Column (name = "nombre", nullable = false, length = 50)
     private String name;
     @Column (name = "correo_electronico", nullable = false, length = 75)
+    @NotBlank(message = "El correo es obligatorio")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@espacioscreativos\\.com$",
+            message = "El correo debe terminar en @espacioscreativos.com"
+    )
     private String email;
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 8, message = "La contraseña debe tener mínimo 8 caracteres")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#_-]).{8,}$",
+            message = "La contraseña debe tener mayúsculas, minúsculas, números y símbolos"
+    )
+    private String password;
     @Min(15)
     @Max(65)
     @Column (name = "edad", nullable = false)
