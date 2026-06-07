@@ -55,7 +55,6 @@ public class InstrumentosService {
             Instrumentos instrumento = optionalInst.get();
             instrumento.setName(instrumentoEdit.getName());
             instrumento.setCondition(instrumentoEdit.getCondition());
-            instrumento.setAvailability(instrumentoEdit.getAvailability());
             instrumento.setQuantity(instrumentoEdit.getQuantity());
 
             return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
@@ -65,10 +64,6 @@ public class InstrumentosService {
 
     public List<InstrumentosDTO> findByName (String name){
         return this.convertListDTO(this.instrumentosRepository.findByName(name));
-    }
-
-    public List<InstrumentosDTO> findByAvailability (String availability){
-        return this.convertListDTO(this.instrumentosRepository.findByAvailability(availability));
     }
 
     public List<InstrumentosDTO> findByCondition (String condition){
@@ -81,7 +76,6 @@ public class InstrumentosService {
 
         dto.setName(instrumento.getName());
         dto.setCondition(instrumento.getCondition());
-        dto.setAvailability(instrumento.getAvailability());
         dto.setQuantity(instrumento.getQuantity());
 
         return dto;
