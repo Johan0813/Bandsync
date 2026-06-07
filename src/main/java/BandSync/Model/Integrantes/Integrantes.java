@@ -33,7 +33,7 @@ public class Integrantes {
     private Integer age;
     @Column (name = "rol", nullable = false, length = 25)
     private String type;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_instrumento", nullable = false)
     private Instrumentos instrument;
     @Column (name = "seccion", nullable = false, length = 30)
