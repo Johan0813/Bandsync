@@ -18,24 +18,31 @@ public class InstrumentosService {
 
     public InstrumentosDTO saveInstrumento(Instrumentos instrumento){
 
-        Optional<Instrumentos> opt =
-                this.instrumentosRepository.findById(instrumento.getId());
-
-        if(opt.isPresent()){
+        if (instrumento.getQuantity()<=0){
             return null;
         }
+        List<Instrumentos> instrumentos =
+                this.instrumentosRepository.findByName(instrumento.getName());
 
-        return this.convertInstrumentoDTO(
-                this.instrumentosRepository.save(instrumento)
-        );
+        if(!instrumentos.isEmpty()){
+
+            Instrumentos existente = instrumentos.get(0);
+
+            existente.setQuantity(existente.getQuantity() + instrumento.getQuantity());
+
+            return this.convertInstrumentoDTO(this.instrumentosRepository.save(existente));
+        }
+
+        return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
     }
+
     public List<InstrumentosDTO> findAll(){
         return this.convertListDTO(
                 this.instrumentosRepository.findAll()
         );
     }
 
-    public InstrumentosDTO findByIdIntrumento (Integer id){
+    public InstrumentosDTO findByIdInstrumento (Integer id){
         Optional<Instrumentos> optional = this.instrumentosRepository.findById(id);
 
         if (optional.isPresent()){
@@ -44,16 +51,37 @@ public class InstrumentosService {
         return null;
     }
 
-    public void deleteInstrumento (Integer id){
-        this.instrumentosRepository.deleteById(id);
-    }
+    public InstrumentosDTO deleteInstrumento(Integer id, Integer quantity){
 
+        Optional<Instrumentos> optional =
+                this.instrumentosRepository.findById(id);
+
+        if(optional.isPresent()){
+
+            Instrumentos instrumento = optional.get();
+
+            if(quantity <= instrumento.getQuantity()){
+
+                instrumento.setQuantity(
+                        instrumento.getQuantity() - quantity
+                );
+
+                return this.convertInstrumentoDTO(
+                        this.instrumentosRepository.save(instrumento)
+                );
+            }
+        }
+
+        return null;
+    }
     public InstrumentosDTO editInstrumento (Integer id, Instrumentos instrumentoEdit){
         Optional<Instrumentos> optionalInst = this.instrumentosRepository.findById(id);
 
         if (optionalInst.isPresent()){
+            if (instrumentoEdit.getQuantity()<0){
+                return null;
+            }
             Instrumentos instrumento = optionalInst.get();
-            instrumento.setName(instrumentoEdit.getName());
             instrumento.setQuantity(instrumentoEdit.getQuantity());
 
             return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
