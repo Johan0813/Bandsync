@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface InstrumentosRepository extends JpaRepository <Instrumentos, Integer>{
     List <Instrumentos> findByName (String name);
-    List <Instrumentos> findByCondition (String condition);
 }

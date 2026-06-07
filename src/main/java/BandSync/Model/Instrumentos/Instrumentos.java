@@ -13,8 +13,6 @@ public class Instrumentos {
     private Integer id;
     @Column(name = "nombre", nullable = false, length = 50)
     private String name;
-    @Column(name = "condicion", nullable = false, length = 50)
-    private String condition;
     @Column (name = "cantidad", nullable = false)
     private Integer quantity;
 
@@ -23,7 +21,6 @@ public class Instrumentos {
 
     public Instrumentos(String name, String condition, Integer quantity) {
         this.name = name;
-        this.condition = condition;
         this.quantity = quantity;
     }
 
@@ -41,14 +38,6 @@ public class Instrumentos {
 
     public void setName(String name){
         this.name = name;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
     }
 
     public Integer getQuantity() {
