@@ -34,7 +34,7 @@ public class Integrantes {
     @Column (name = "rol", nullable = false, length = 25)
     private String type;
     @ManyToOne
-    @JoinColumn(name = "id_instrumento", nullable = false)
+    @JoinColumn(name = "id_instrumento")
     private Instrumentos instrument;
     @Column (name = "seccion", nullable = false, length = 30)
     private String section;
