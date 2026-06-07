@@ -15,18 +15,15 @@ public class Instrumentos {
     private String name;
     @Column(name = "condicion", nullable = false, length = 50)
     private String condition;
-    @Column(name = "disponibilidad", nullable = false, length = 50)
-    private String availability;
     @Column (name = "cantidad", nullable = false)
     private Integer quantity;
 
     public Instrumentos() {
     }
 
-    public Instrumentos(String name, String condition, String availability, Integer quantity) {
+    public Instrumentos(String name, String condition, Integer quantity) {
         this.name = name;
         this.condition = condition;
-        this.availability = availability;
         this.quantity = quantity;
     }
 
@@ -52,14 +49,6 @@ public class Instrumentos {
 
     public void setCondition(String condition) {
         this.condition = condition;
-    }
-
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
     }
 
     public Integer getQuantity() {
