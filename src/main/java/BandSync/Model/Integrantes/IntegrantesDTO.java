@@ -8,11 +8,12 @@ public class IntegrantesDTO {
     private String instrument;
     private Integer instrumentId;
     private String section;
+    private String password;
 
     public IntegrantesDTO() {
     }
 
-    public IntegrantesDTO(String name, String email, Integer age, String type, String instrument, String section, Integer instrumentId) {
+    public IntegrantesDTO(String name, String email, Integer age, String type, String instrument, String section, Integer instrumentId, String password) {
         this.name = name;
         this.email = email;
         this.age = age;
@@ -20,6 +21,7 @@ public class IntegrantesDTO {
         this.instrument = instrument;
         this.section = section;
         this.instrumentId = instrumentId;
+        this.password = password;
     }
 
     public String getName() {
@@ -76,5 +78,13 @@ public class IntegrantesDTO {
 
     public void setSection(String section) {
         this.section = section;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
