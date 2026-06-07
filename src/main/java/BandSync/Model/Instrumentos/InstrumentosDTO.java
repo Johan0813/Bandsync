@@ -4,14 +4,16 @@ public class InstrumentosDTO {
     private String name;
     private String condition;
     private String availability;
+    private Integer quantity;
 
     public InstrumentosDTO() {
     }
 
-    public InstrumentosDTO(String name, String condition, String availability) {
+    public InstrumentosDTO(String name, String condition, String availability, Integer quantity ) {
         this.name = name;
         this.condition = condition;
         this.availability = availability;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -38,4 +40,11 @@ public class InstrumentosDTO {
         this.availability = availability;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
