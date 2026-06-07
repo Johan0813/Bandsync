@@ -6,19 +6,20 @@ public class IntegrantesDTO {
     private Integer age;
     private String type;
     private String instrument;
+    private Integer instrumentId;
     private String section;
 
     public IntegrantesDTO() {
     }
 
-    public IntegrantesDTO(String name, String email, Integer age,
-                          String type, String instrument, String section) {
+    public IntegrantesDTO(String name, String email, Integer age, String type, String instrument, String section, Integer instrumentId) {
         this.name = name;
         this.email = email;
         this.age = age;
         this.type = type;
         this.instrument = instrument;
         this.section = section;
+        this.instrumentId = instrumentId;
     }
 
     public String getName() {
@@ -59,6 +60,14 @@ public class IntegrantesDTO {
 
     public void setInstrument(String instrument) {
         this.instrument = instrument;
+    }
+
+    public Integer getInstrumentId() {
+        return instrumentId;
+    }
+
+    public void setInstrumentId(Integer instrumentId) {
+        this.instrumentId = instrumentId;
     }
 
     public String getSection() {
