@@ -1,5 +1,6 @@
 package BandSync.Service.Presentaciones;
 
+import BandSync.Model.Integrantes.Integrantes;
 import BandSync.Model.Presentaciones.Presentaciones;
 import BandSync.Model.Presentaciones.PresentacionesDTO;
 import BandSync.Repository.Ensayos.EnsayosRepository;
@@ -21,11 +22,7 @@ public class PresentacionesService {
     @Autowired
     PresentacionesRepository presentacionesRepository;
     @Autowired
-    EnsayosRepository ensayosRepository;
-    @Autowired
     IntegrantesRepository integrantesRepository;
-    @Autowired
-    InstrumentosRepository instrumentosRepository;
 
     //Convertis
     public  List<PresentacionesDTO> convertirListPresentacionesDTO (List<Presentaciones> presentacionesList){
@@ -40,7 +37,6 @@ public class PresentacionesService {
         PresentacionesDTO dto= new PresentacionesDTO();
         dto.setDate(presentaciones.getDate());
         dto.setLocation(presentaciones.getLocation());
-        dto.setAsistencia(presentaciones.getAssistance());
         dto.setAsistencia(presentaciones.getAssistance());
         return dto;
     }
@@ -59,34 +55,73 @@ public class PresentacionesService {
     }
 
     public void deletePresentation (Integer id){
-        this.presentacionesRepository.deleteById(id);
+        Optional<Presentaciones> optional = this.presentacionesRepository.findById(id);
+
+        if (optional.isPresent()){
+            LocalDate date = optional.get().getDate();
+
+            List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
+
+            for (Presentaciones presentacion : presentaciones){
+                this.presentacionesRepository.delete(presentacion);
+            }
+        }
     }
 
-    public PresentacionesDTO savePresentation (Presentaciones presentaciones){
-        Optional <Presentaciones> cajta= this.presentacionesRepository.findById(presentaciones.getId());
-        if (cajta.isPresent()){
+    public List <PresentacionesDTO> savePresentation (Presentaciones presentaciones){
+        if(!this.presentacionesRepository
+                .findByDate(presentaciones.getDate())
+                .isEmpty()){
+
             return null;
         }
-        return this.convertirPresentacionesDTO(this.presentacionesRepository.save(presentaciones));
+    List<Integrantes> integrantes = this.integrantesRepository.findAll();
+    List<PresentacionesDTO> presentacionesCreadas = new ArrayList<>();
+
+    for (Integrantes integrante : integrantes){
+        Presentaciones nueva = new Presentaciones();
+        nueva.setDate(presentaciones.getDate());
+        nueva.setLocation(presentaciones.getLocation());
+        nueva.setIntegrante(integrante);
+        nueva.setAssistance(presentaciones.getAssistance()
+        );
+        Presentaciones guardada = this.presentacionesRepository.save(nueva);
+
+        presentacionesCreadas.add(this.convertirPresentacionesDTO(guardada)
+        );
+    }
+    return presentacionesCreadas;
     }
 
-    public PresentacionesDTO editPresentation (Integer id, Presentaciones presentacionesEdit){
-        Optional <Presentaciones> cajtaPresentacionNueva = this.presentacionesRepository.findById(id);
-        if (cajtaPresentacionNueva.isPresent()){
-            Presentaciones presentaciones = cajtaPresentacionNueva.get();
-            presentaciones.setLocation(presentacionesEdit.getLocation());
-            presentaciones.setDate(presentacionesEdit.getDate());
-            presentaciones.setAssistance(presentacionesEdit.getAssistance());
-            presentaciones.setIntegrante(presentacionesEdit.getIntegrante());
 
-            return this.convertirPresentacionesDTO(this.presentacionesRepository.save(presentaciones));
+    public List<PresentacionesDTO> editPresentation(Integer id, Presentaciones presentacionesEdit){
+
+        Optional<Presentaciones> optional = this.presentacionesRepository.findById(id);
+        if(optional.isPresent()){
+            LocalDate fechaOriginal = optional.get().getDate();
+
+            if(!fechaOriginal.equals(presentacionesEdit.getDate()) && !this.presentacionesRepository.findByDate(presentacionesEdit.getDate()).isEmpty()){
+                return null;
+            }
+            List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(fechaOriginal);
+            List<PresentacionesDTO> editadas = new ArrayList<>();
+
+            for(Presentaciones presentacion : presentaciones){
+
+                presentacion.setDate(presentacionesEdit.getDate());
+                presentacion.setLocation(presentacionesEdit.getLocation());
+                presentacion.setAssistance(presentacionesEdit.getAssistance());
+                Presentaciones guardada = this.presentacionesRepository.save(presentacion);
+                editadas.add(this.convertirPresentacionesDTO(guardada));
+            }
+            return editadas;
         }
         return null;
     }
-    public Presentaciones findbyIdPresentaion(Integer id){
+    public PresentacionesDTO findbyIdPresentation(Integer id){
         Optional<Presentaciones> cajilaId = this.presentacionesRepository.findById(id);
         if(cajilaId.isPresent()){
-            return cajilaId.get();
+            return this.convertirPresentacionesDTO(cajilaId.get());
         }
         return null;
     }
