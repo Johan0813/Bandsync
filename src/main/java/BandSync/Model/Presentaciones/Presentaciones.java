@@ -25,16 +25,16 @@ import java.time.LocalDate;
         private Integrantes integrante;
 
         @Column(name = "asistencia", nullable = false, length = 20)
-        private String asistencia;
+        private String assistance;
 
         public Presentaciones() {
         }
 
-        public Presentaciones(LocalDate date, String location, Integrantes integrante, String asistencia) {
+        public Presentaciones(LocalDate date, String location, Integrantes integrante, String assistance) {
             this.date = date;
             this.location = location;
             this.integrante = integrante;
-            this.asistencia = asistencia;
+            this.assistance = assistance;
         }
 
         public Integer getId() {
@@ -69,12 +69,12 @@ import java.time.LocalDate;
             this.integrante = integrante;
         }
 
-        public String getAsistencia() {
-            return asistencia;
+        public String getAssistance() {
+            return assistance;
         }
 
-        public void setAsistencia(String asistencia) {
-            this.asistencia = asistencia;
+        public void setAssistance(String assistance) {
+            this.assistance = assistance;
         }
     }
 

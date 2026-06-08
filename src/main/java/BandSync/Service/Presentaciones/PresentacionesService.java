@@ -40,8 +40,8 @@ public class PresentacionesService {
         PresentacionesDTO dto= new PresentacionesDTO();
         dto.setDate(presentaciones.getDate());
         dto.setLocation(presentaciones.getLocation());
-        dto.setAsistencia(presentaciones.getAsistencia());
-        dto.setAsistencia(presentaciones.getAsistencia());
+        dto.setAsistencia(presentaciones.getAssistance());
+        dto.setAsistencia(presentaciones.getAssistance());
         return dto;
     }
 
@@ -76,7 +76,7 @@ public class PresentacionesService {
             Presentaciones presentaciones = cajtaPresentacionNueva.get();
             presentaciones.setLocation(presentacionesEdit.getLocation());
             presentaciones.setDate(presentacionesEdit.getDate());
-            presentaciones.setAsistencia(presentacionesEdit.getAsistencia());
+            presentaciones.setAssistance(presentacionesEdit.getAssistance());
             presentaciones.setIntegrante(presentacionesEdit.getIntegrante());
 
             return this.convertirPresentacionesDTO(this.presentacionesRepository.save(presentaciones));
