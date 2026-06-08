@@ -69,10 +69,7 @@ public class PresentacionesService {
     }
 
     public List <PresentacionesDTO> savePresentation (Presentaciones presentaciones){
-        if(!this.presentacionesRepository
-                .findByDate(presentaciones.getDate())
-                .isEmpty()){
-
+        if(!this.presentacionesRepository.findByDate(presentaciones.getDate()).isEmpty()){
             return null;
         }
     List<Integrantes> integrantes = this.integrantesRepository.findAll();
@@ -83,12 +80,10 @@ public class PresentacionesService {
         nueva.setDate(presentaciones.getDate());
         nueva.setLocation(presentaciones.getLocation());
         nueva.setIntegrante(integrante);
-        nueva.setAssistance(presentaciones.getAssistance()
-        );
+        nueva.setAssistance(presentaciones.getAssistance());
         Presentaciones guardada = this.presentacionesRepository.save(nueva);
 
-        presentacionesCreadas.add(this.convertirPresentacionesDTO(guardada)
-        );
+        presentacionesCreadas.add(this.convertirPresentacionesDTO(guardada));
     }
     return presentacionesCreadas;
     }
