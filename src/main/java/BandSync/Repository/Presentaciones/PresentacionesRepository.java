@@ -1,5 +1,6 @@
 package BandSync.Repository.Presentaciones;
 
+import BandSync.Model.Ensayos.Ensayos;
 import BandSync.Model.Presentaciones.Presentaciones;
 import org.springframework.data.jpa.repository.JpaRepository;
 
