@@ -44,11 +44,7 @@ public class InstrumentosService {
 
     public InstrumentosDTO findByIdInstrumento (Integer id){
         Optional<Instrumentos> optional = this.instrumentosRepository.findById(id);
-
-        if (optional.isPresent()){
             return this.convertInstrumentoDTO(optional.get());
-        }
-        return null;
     }
 
     public InstrumentosDTO deleteInstrumento(Integer id, Integer quantity){

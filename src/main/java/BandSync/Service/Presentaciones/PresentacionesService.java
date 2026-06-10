@@ -113,11 +113,14 @@ public class PresentacionesService {
         }
         return null;
     }
-    public PresentacionesDTO findbyIdPresentation(Integer id){
-        Optional<Presentaciones> cajilaId = this.presentacionesRepository.findById(id);
-        if(cajilaId.isPresent()){
-            return this.convertirPresentacionesDTO(cajilaId.get());
+    public Presentaciones findById(Integer id){
+
+        Optional<Presentaciones> presentacion = this.presentacionesRepository.findById(id);
+
+        if(presentacion.isPresent()){
+            return presentacion.get();
         }
+
         return null;
     }
 
