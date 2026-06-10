@@ -50,43 +50,43 @@ public class IntegrantesService {
     public IntegrantesDTO saveIntegrante(Integrantes integrante){
 
         if(this.repositoryInt.findByEmail(integrante.getEmail()) != null){
-            return null;
+            throw new RuntimeException("El correo ya se encuentra registrado");
         }
 
         if(integrante.getInstrument() == null){
-            return null;
+            throw new RuntimeException("Debe seleccionar un instrumento");
         }
 
-        Optional<Instrumentos> optionalInstrumento =
-                this.repositoryInst.findById(integrante.getInstrument().getId());
+        Optional<Instrumentos> optionalInstrumento = this.repositoryInst.findById(integrante.getInstrument().getId());
 
         if(optionalInstrumento.isEmpty()){
-            return null;
+            throw new RuntimeException("El instrumento no existe");
         }
 
         Instrumentos instrumento = optionalInstrumento.get();
 
         if(instrumento.getQuantity()<= 0){
-            return null;
+            throw new RuntimeException("No hay instrumentos disponibles");
         }
 
         instrumento.setQuantity(instrumento.getQuantity()-1);
 
         this.repositoryInst.save(instrumento);
 
-        return this.convertirIntegrantesDTO(
-                this.repositoryInt.save(integrante));
+        return this.convertirIntegrantesDTO(this.repositoryInt.save(integrante));
     }
 
     public List<IntegrantesDTO> findAll (){
         return this.convertirListIntegrantesDTO(this.repositoryInt.findAll());
     }
+
     public void deleteIntegrante(Integer id){
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
-        if(optional.isPresent()){
-
+        if(optional.isEmpty()) {
+            throw new RuntimeException("El integrante no existe");
+        }
             Integrantes integrante = optional.get();
 
             if(integrante.getInstrument() != null){
@@ -98,40 +98,43 @@ public class IntegrantesService {
             }
 
             this.repositoryInt.deleteById(id);
-        }
+
     }
 
-    public IntegrantesDTO editIntegrante(Integer id, Integrantes integranteEdit){
+    public IntegrantesDTO editIntegrante(Integer id, Integrantes integranteEdit) {
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
-        if(optional.isPresent()){
+        if (optional.isEmpty()) {
+            throw new RuntimeException("El integrante no existe");
+
+        }
 
             Integrantes integrante = optional.get();
 
-            if(!integrante.getEmail().equals(integranteEdit.getEmail())
-                    && this.repositoryInt.findByEmail(integranteEdit.getEmail()) != null){
-                return null;
+            if (!integrante.getEmail().equals(integranteEdit.getEmail())
+                    && this.repositoryInt.findByEmail(integranteEdit.getEmail()) != null) {
+                throw new RuntimeException("El correo ya se encuentra registrado");
             }
 
-            if(integranteEdit.getInstrument() != null){
+            if (integranteEdit.getInstrument() != null) {
 
                 Instrumentos instrumentoActual = integrante.getInstrument();
                 Instrumentos instrumentoNuevo = integranteEdit.getInstrument();
 
-                if(!instrumentoActual.getId().equals(instrumentoNuevo.getId())){
+                if (!instrumentoActual.getId().equals(instrumentoNuevo.getId())) {
 
                     Optional<Instrumentos> optionalInstrumento =
                             this.repositoryInst.findById(instrumentoNuevo.getId());
 
-                    if(optionalInstrumento.isEmpty()){
-                        return null;
+                    if (optionalInstrumento.isEmpty()) {
+                        throw new RuntimeException("El instrumento no existe");
                     }
 
                     Instrumentos nuevo = optionalInstrumento.get();
 
-                    if(nuevo.getQuantity() <= 0){
-                        return null;
+                    if (nuevo.getQuantity() <= 0) {
+                        throw new RuntimeException("No hay instrumentos disponibles");
                     }
 
                     instrumentoActual.setQuantity(instrumentoActual.getQuantity() + 1);
@@ -151,47 +154,81 @@ public class IntegrantesService {
             integrante.setType(integranteEdit.getType());
             integrante.setSection(integranteEdit.getSection());
 
-            return this.convertirIntegrantesDTO(
-                    this.repositoryInt.save(integrante));
+            return this.convertirIntegrantesDTO(this.repositoryInt.save(integrante));
         }
 
-        return null;
-    }
+
 
     public IntegrantesDTO findById(Integer id){
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
-        if(optional.isPresent()){
-            return this.convertirIntegrantesDTO(optional.get());
+        if(optional.isEmpty()){
+            throw new RuntimeException("El integrante no existe");
         }
 
-        return null;
+        return this.convertirIntegrantesDTO(optional.get());
     }
 
     public IntegrantesDTO findByEmail (String email) {
-        return this.convertirIntegrantesDTO(this.repositoryInt.findByEmail(email));
+        Integrantes integrantes = this.repositoryInt.findByEmail(email);
+
+        if (integrantes == null){
+            throw new RuntimeException("El correo no existe");
+        }
+        return this.convertirIntegrantesDTO(integrantes);
     }
 
     public List<IntegrantesDTO> findByType(String type){
-        return this.convertirListIntegrantesDTO(this.repositoryInt.findByType(type));
+        List<Integrantes> integrantes = this.repositoryInt.findByType(type);
+
+        if (integrantes==null){
+            throw new RuntimeException("No existen integrantes con este rol");
+        }
+        return this.convertirListIntegrantesDTO(integrantes);
     }
 
     public List<IntegrantesDTO> findBySection (String section){
-        return this.convertirListIntegrantesDTO(this.repositoryInt.findBySection(section));
+        List<Integrantes> integrantes = this.repositoryInt.findBySection(section);
+
+        if (integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes en esta seccion");
+        }
+
+        return this.convertirListIntegrantesDTO(integrantes);
     }
 
     public List<IntegrantesDTO> findByName (String name){
-        return this.convertirListIntegrantesDTO(this.repositoryInt.findByName(name));
+        List<Integrantes> integrantes = this.repositoryInt.findByName(name);
+
+        if (integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes con ese nombre");
+        }
+        return this.convertirListIntegrantesDTO(integrantes);
     }
     public List<IntegrantesDTO> findAllByOrderByNameAsc(){
-        return this.convertirListIntegrantesDTO(this.repositoryInt.findAllByOrderByNameAsc());
+        List<Integrantes> integrantes = this.repositoryInt.findAllByOrderByNameAsc();
+
+        if (integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes registrados");
+        }
+        return this.convertirListIntegrantesDTO(integrantes);
     }
     public IntegrantesDTO findByEmailAndPassword(String email, String password){
-        return this.convertirIntegrantesDTO(this.repositoryInt.findByEmailAndPassword(email, password));
+        Integrantes integrantes = this.repositoryInt.findByEmailAndPassword(email, password);
+
+        if (integrantes == null) {
+            throw new RuntimeException("Credenciales incorrectas");
+        }
+        return this.convertirIntegrantesDTO(integrantes);
     }
 
     public Integrantes login (String email, String password){
+        Integrantes integrantes = this.repositoryInt.verificarCredenciales(email, password);
+
+        if (integrantes == null) {
+            throw new RuntimeException("Credenciales incorrectas");
+        }
         return this.repositoryInt.verificarCredenciales(email, password);
     }
 }
