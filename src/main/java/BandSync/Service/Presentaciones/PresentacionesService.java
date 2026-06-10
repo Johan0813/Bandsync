@@ -43,21 +43,33 @@ public class PresentacionesService {
 
 
     public List<PresentacionesDTO> findByDate(LocalDate date){
-        return this.convertirListPresentacionesDTO(this.presentacionesRepository.findByDate(date));
+        List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
+
+        if (presentaciones.isEmpty()){
+            throw new RuntimeException("No existe presentaciones en la fecha indicada");
+        }
+        return this.convertirListPresentacionesDTO(presentaciones);
     }
 
     public List<PresentacionesDTO> findByLocation(String location){
-        return this.convertirListPresentacionesDTO(this.presentacionesRepository.findByLocation(location));
+        List<Presentaciones> presentaciones = this.presentacionesRepository.findByLocation(location);
+
+        if (presentaciones.isEmpty()){
+            throw new RuntimeException("No existen presentaciones en el lugar indicado");
+        }
+        return this.convertirListPresentacionesDTO(presentaciones);
     }
 
     public List<PresentacionesDTO> findAll(){
-        return this.convertirListPresentacionesDTO(presentacionesRepository.findAll());
+        return this.convertirListPresentacionesDTO(this.presentacionesRepository.findAll());
     }
 
     public void deletePresentation (Integer id){
         Optional<Presentaciones> optional = this.presentacionesRepository.findById(id);
 
-        if (optional.isPresent()){
+        if (optional.isEmpty()) {
+            throw new RuntimeException("La presentacion no existe");
+        }
             LocalDate date = optional.get().getDate();
 
             List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
@@ -66,11 +78,11 @@ public class PresentacionesService {
                 this.presentacionesRepository.delete(presentacion);
             }
         }
-    }
+
 
     public List <PresentacionesDTO> savePresentation (Presentaciones presentaciones){
         if(!this.presentacionesRepository.findByDate(presentaciones.getDate()).isEmpty()){
-            return null;
+            throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
     List<Integrantes> integrantes = this.integrantesRepository.findAll();
     List<PresentacionesDTO> presentacionesCreadas = new ArrayList<>();
@@ -92,11 +104,13 @@ public class PresentacionesService {
     public List<PresentacionesDTO> editPresentation(Integer id, Presentaciones presentacionesEdit){
 
         Optional<Presentaciones> optional = this.presentacionesRepository.findById(id);
-        if(optional.isPresent()){
+        if(optional.isEmpty()) {
+            throw new RuntimeException("La presentacion no existe");
+        }
             LocalDate fechaOriginal = optional.get().getDate();
 
             if(!fechaOriginal.equals(presentacionesEdit.getDate()) && !this.presentacionesRepository.findByDate(presentacionesEdit.getDate()).isEmpty()){
-                return null;
+                throw new RuntimeException("Ya existe una presentacion para esa fecha");
             }
             List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(fechaOriginal);
             List<PresentacionesDTO> editadas = new ArrayList<>();
@@ -110,19 +124,18 @@ public class PresentacionesService {
                 editadas.add(this.convertirPresentacionesDTO(guardada));
             }
             return editadas;
-        }
-        return null;
+
     }
     public Presentaciones findById(Integer id){
 
         Optional<Presentaciones> presentacion = this.presentacionesRepository.findById(id);
 
-        if(presentacion.isPresent()){
+        if(presentacion.isEmpty()) {
+            throw new RuntimeException("La presentacion no existe");
+        }
             return presentacion.get();
         }
 
-        return null;
-    }
 
 
 }//fin de la clase
