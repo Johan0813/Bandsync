@@ -1,18 +1,20 @@
 package BandSync.Model.Ensayos;
 
+import BandSync.Model.Integrantes.Integrantes;
+
 import java.time.LocalDate;
 
 public class EnsayosDTO {
 
     private LocalDate date;
     private String section;
-    private String integrante;
+    private Integrantes integrante;
     private String asistencia;
 
     public EnsayosDTO() {
     }
 
-    public EnsayosDTO(LocalDate date, String section, String integrante, String asistencia) {
+    public EnsayosDTO(LocalDate date, String section, Integrantes integrante, String asistencia) {
         this.date = date;
         this.section = section;
         this.integrante = integrante;
@@ -35,13 +37,11 @@ public class EnsayosDTO {
         this.section = section;
     }
 
-    public String getIntegrante() {
+    public Integrantes getIntegrante() {
         return integrante;
     }
 
-    public void setIntegrante(String integrante) {
-        this.integrante = integrante;
-    }
+    public void setIntegrante(Integrantes integrante) {this.integrante = integrante;}
 
     public String getAsistencia() {
         return asistencia;
