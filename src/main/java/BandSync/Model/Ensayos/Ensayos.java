@@ -20,16 +20,16 @@ public class Ensayos {
     @JoinColumn(name = "id_integrante", nullable = false, foreignKey = @ForeignKey(name = "fk_ensayo_integrante"))
     private Integrantes integrante;
     @Column(name = "asistencia", nullable = false, length = 20)
-    private String asistencia;
+    private String assistance;
 
     public Ensayos() {
     }
 
-    public Ensayos(LocalDate date, String section, Integrantes integrante, String asistencia) {
+    public Ensayos(LocalDate date, String section, Integrantes integrante, String assistance) {
         this.date = date;
         this.section = section;
         this.integrante = integrante;
-        this.asistencia = asistencia;
+        this.assistance = this.assistance;
     }
 
     public Integer getId() {
@@ -64,11 +64,11 @@ public class Ensayos {
         this.integrante = integrante;
     }
 
-    public String getAsistencia() {
-        return asistencia;
+    public String getAssistance() {
+        return assistance;
     }
 
-    public void setAsistencia(String asistencia) {
-        this.asistencia = asistencia;
+    public void setAssistance(String assistance) {
+        this.assistance = assistance;
     }
 }

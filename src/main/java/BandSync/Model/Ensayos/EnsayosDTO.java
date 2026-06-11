@@ -9,16 +9,16 @@ public class EnsayosDTO {
     private LocalDate date;
     private String section;
     private Integrantes integrante;
-    private String asistencia;
+    private String assistance;
 
     public EnsayosDTO() {
     }
 
-    public EnsayosDTO(LocalDate date, String section, Integrantes integrante, String asistencia) {
+    public EnsayosDTO(LocalDate date, String section, Integrantes integrante, String assistance) {
         this.date = date;
         this.section = section;
         this.integrante = integrante;
-        this.asistencia = asistencia;
+        this.assistance = assistance;
     }
 
     public LocalDate getDate() {
@@ -43,11 +43,11 @@ public class EnsayosDTO {
 
     public void setIntegrante(Integrantes integrante) {this.integrante = integrante;}
 
-    public String getAsistencia() {
-        return asistencia;
+    public String getAssistance() {
+        return assistance;
     }
 
-    public void setAsistencia(String asistencia) {
-        this.asistencia = asistencia;
+    public void setAssistance(String assistance) {
+        this.assistance = this.assistance;
     }
 }

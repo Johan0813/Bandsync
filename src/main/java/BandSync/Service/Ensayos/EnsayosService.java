@@ -3,13 +3,8 @@ package BandSync.Service.Ensayos;
 import BandSync.Model.Ensayos.Ensayos;
 import BandSync.Model.Ensayos.EnsayosDTO;
 import BandSync.Model.Integrantes.Integrantes;
-import BandSync.Model.Presentaciones.Presentaciones;
 import BandSync.Repository.Ensayos.EnsayosRepository;
-import BandSync.Repository.Instrumentos.InstrumentosRepository;
 import BandSync.Repository.Integrantes.IntegrantesRepository;
-import BandSync.Repository.Presentaciones.PresentacionesRepository;
-import BandSync.Service.Presentaciones.PresentacionesService;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +33,7 @@ public class EnsayosService {
     public EnsayosDTO convertirEnsayosDTO(Ensayos ensayos ){
         EnsayosDTO dto = new EnsayosDTO();
         dto.setDate(ensayos.getDate());
-        dto.setAsistencia(ensayos.getAsistencia());
+        dto.setAssistance(ensayos.getAssistance());
         dto.setIntegrante(ensayos.getIntegrante());
         dto.setSection(ensayos.getSection());
         return dto;
@@ -97,7 +92,7 @@ public class EnsayosService {
         for (Integrantes integrante : integrantes){
             Ensayos nuevo = new Ensayos();
             nuevo.setDate(ensayos.getDate());
-            nuevo.setAsistencia(ensayos.getAsistencia());
+            nuevo.setAssistance(ensayos.getAssistance());
             nuevo.setSection(ensayos.getSection());
             nuevo.setIntegrante(integrante);
             Ensayos agendado = this.ensayosRepository.save(nuevo);
@@ -123,7 +118,7 @@ public class EnsayosService {
         for (Ensayos ensayo : ensayos){
             ensayo.setDate(ensayosEdit.getDate());
             ensayo.setSection(ensayosEdit.getSection());
-            ensayo.setAsistencia(ensayosEdit.getAsistencia());
+            ensayo.setAssistance(ensayosEdit.getAssistance());
             Ensayos agendado = this.ensayosRepository.save(ensayo);
             editados.add(this.convertirEnsayosDTO(agendado));
         }
