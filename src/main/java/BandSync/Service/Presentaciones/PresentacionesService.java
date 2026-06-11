@@ -95,6 +95,9 @@ public class PresentacionesService {
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
     List<Integrantes> integrantes = this.integrantesRepository.findAll();
+        if(integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes registrados");
+        }
     List<PresentacionesDTO> presentacionesCreadas = new ArrayList<>();
 
     for (Integrantes integrante : integrantes){
