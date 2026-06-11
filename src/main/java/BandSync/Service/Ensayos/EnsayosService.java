@@ -25,11 +25,7 @@ public class EnsayosService {
     @Autowired
     EnsayosRepository ensayosRepository;
     @Autowired
-    InstrumentosRepository instrumentosRepository;
-    @Autowired
     IntegrantesRepository integrantesRepository;
-    @Autowired
-    PresentacionesRepository presentacionesRepository;
     //metodos
     public List<EnsayosDTO> convertirListEnsayosDTO (List<Ensayos> ensayosList){
         List<EnsayosDTO> listDTO= new ArrayList<>();
@@ -95,7 +91,7 @@ public class EnsayosService {
             nuevo.setDate(ensayos.getDate());
             nuevo.setAsistencia(ensayos.getAsistencia());
             nuevo.setSection(ensayos.getSection());
-            nuevo.setIntegrante(ensayos.getIntegrante());
+            nuevo.setIntegrante(integrante);
             Ensayos agendado = this.ensayosRepository.save(nuevo);
 
             ensayosCreados.add(this.convertirEnsayosDTO(agendado));
@@ -111,14 +107,13 @@ public class EnsayosService {
             LocalDate fechaYaEstablecida = optional.get().getDate();
 
         if (!fechaYaEstablecida.equals(ensayosEdit.getDate()) && !this.ensayosRepository.findByDate(ensayosEdit.getDate()).isEmpty()){
-            throw new RuntimeException("El ensayo no existe");
+            throw new RuntimeException("Ya existe un ensayo en esta fecha!");
         }
         List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaYaEstablecida);
         List<EnsayosDTO> editados = new ArrayList<>();
 
         for (Ensayos ensayo : ensayos){
             ensayo.setDate(ensayosEdit.getDate());
-            ensayo.setIntegrante(ensayosEdit.getIntegrante());
             ensayo.setSection(ensayosEdit.getSection());
             ensayo.setAsistencia(ensayosEdit.getAsistencia());
             Ensayos agendado = this.ensayosRepository.save(ensayo);
