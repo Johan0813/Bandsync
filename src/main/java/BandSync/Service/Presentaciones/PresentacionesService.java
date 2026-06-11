@@ -1,5 +1,7 @@
 package BandSync.Service.Presentaciones;
 
+import BandSync.Model.Ensayos.Ensayos;
+import BandSync.Model.Ensayos.EnsayosDTO;
 import BandSync.Model.Integrantes.Integrantes;
 import BandSync.Model.Presentaciones.Presentaciones;
 import BandSync.Model.Presentaciones.PresentacionesDTO;
@@ -60,6 +62,14 @@ public class PresentacionesService {
         return this.convertirListPresentacionesDTO(presentaciones);
     }
 
+    public List<PresentacionesDTO> findByAssistance (String assistance){
+        List<Presentaciones> presentaciones = this.presentacionesRepository.findByAssistance(assistance);
+        if (presentaciones.isEmpty()){
+            throw new RuntimeException("No hay lista de asistencia en este momento");
+        }
+        return this.convertirListPresentacionesDTO(presentaciones);
+    }
+
     public List<PresentacionesDTO> findAll(){
         return this.convertirListPresentacionesDTO(this.presentacionesRepository.findAll());
     }
@@ -85,6 +95,9 @@ public class PresentacionesService {
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
     List<Integrantes> integrantes = this.integrantesRepository.findAll();
+        if(integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes registrados");
+        }
     List<PresentacionesDTO> presentacionesCreadas = new ArrayList<>();
 
     for (Integrantes integrante : integrantes){
