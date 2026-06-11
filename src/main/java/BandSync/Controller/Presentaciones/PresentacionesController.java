@@ -69,9 +69,18 @@ public class PresentacionesController {
     @GetMapping("/location/{location}")
     public ResponseEntity<?> findByLocation(@PathVariable String location){
         try{
-            return ResponseEntity.ok(this.presentacionesService.findByLocation(location)
-            );
+            return ResponseEntity.ok(this.presentacionesService.findByLocation(location));
         }catch(RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping ("/assistance/{assistance}")
+
+    public ResponseEntity<?> findByAsisstance (@PathVariable String assistance){
+        try {
+            return ResponseEntity.ok(this.presentacionesService.findByAssistance(assistance));
+        }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
