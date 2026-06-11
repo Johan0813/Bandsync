@@ -25,11 +25,7 @@ public class EnsayosService {
     @Autowired
     EnsayosRepository ensayosRepository;
     @Autowired
-    InstrumentosRepository instrumentosRepository;
-    @Autowired
     IntegrantesRepository integrantesRepository;
-    @Autowired
-    PresentacionesRepository presentacionesRepository;
     //metodos
     public List<EnsayosDTO> convertirListEnsayosDTO (List<Ensayos> ensayosList){
         List<EnsayosDTO> listDTO= new ArrayList<>();
@@ -60,6 +56,14 @@ public class EnsayosService {
         List<Ensayos> ensayos = this.ensayosRepository.findBySection(section);
         if (ensayos.isEmpty()){
             throw new RuntimeException("La sección que indicaste no esta disponible");
+        }
+        return this.convertirListEnsayosDTO(ensayos);
+    }
+
+    public List<EnsayosDTO> findByAssistance (String assistance){
+        List<Ensayos> ensayos = this.ensayosRepository.findByAssistance(assistance);
+        if (ensayos.isEmpty()){
+            throw new RuntimeException("No hay lista de asistencia en este momento");
         }
         return this.convertirListEnsayosDTO(ensayos);
     }
@@ -95,7 +99,7 @@ public class EnsayosService {
             nuevo.setDate(ensayos.getDate());
             nuevo.setAsistencia(ensayos.getAsistencia());
             nuevo.setSection(ensayos.getSection());
-            nuevo.setIntegrante(ensayos.getIntegrante());
+            nuevo.setIntegrante(integrante);
             Ensayos agendado = this.ensayosRepository.save(nuevo);
 
             ensayosCreados.add(this.convertirEnsayosDTO(agendado));
@@ -108,17 +112,16 @@ public class EnsayosService {
         if (optional.isEmpty()) {
             throw  new RuntimeException("El ensayo no existe");
         }
-            LocalDate fechaDeBusqueda = optional.get().getDate();
+            LocalDate fechaYaEstablecida = optional.get().getDate();
 
-        if (!fechaDeBusqueda.equals(ensayosEdit.getDate()) && !this.ensayosRepository.findByDate(ensayosEdit.getDate()).isEmpty()){
-            throw new RuntimeException("El ensayo no existe");
+        if (!fechaYaEstablecida.equals(ensayosEdit.getDate()) && !this.ensayosRepository.findByDate(ensayosEdit.getDate()).isEmpty()){
+            throw new RuntimeException("Ya existe un ensayo en esta fecha!");
         }
-        List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaDeBusqueda);
+        List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaYaEstablecida);
         List<EnsayosDTO> editados = new ArrayList<>();
 
         for (Ensayos ensayo : ensayos){
             ensayo.setDate(ensayosEdit.getDate());
-            ensayo.setIntegrante(ensayosEdit.getIntegrante());
             ensayo.setSection(ensayosEdit.getSection());
             ensayo.setAsistencia(ensayosEdit.getAsistencia());
             Ensayos agendado = this.ensayosRepository.save(ensayo);
