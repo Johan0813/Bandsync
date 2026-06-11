@@ -16,8 +16,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping
-@RestController("api/ensayos")
+@RequestMapping("api/ensayos")
+@RestController
 @CrossOrigin(origins = "*")
 public class EnsayosController {
 @Autowired
