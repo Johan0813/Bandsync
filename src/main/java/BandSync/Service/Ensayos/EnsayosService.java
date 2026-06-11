@@ -108,12 +108,12 @@ public class EnsayosService {
         if (optional.isEmpty()) {
             throw  new RuntimeException("El ensayo no existe");
         }
-            LocalDate fechaYaEstablecida = optional.get().getDate();
+            LocalDate fechaDeBusqueda = optional.get().getDate();
 
-        if (!fechaYaEstablecida.equals(ensayosEdit.getDate()) && !this.ensayosRepository.findByDate(ensayosEdit.getDate()).isEmpty()){
+        if (!fechaDeBusqueda.equals(ensayosEdit.getDate()) && !this.ensayosRepository.findByDate(ensayosEdit.getDate()).isEmpty()){
             throw new RuntimeException("El ensayo no existe");
         }
-        List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaYaEstablecida);
+        List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaDeBusqueda);
         List<EnsayosDTO> editados = new ArrayList<>();
 
         for (Ensayos ensayo : ensayos){
