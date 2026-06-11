@@ -11,4 +11,5 @@ import java.util.List;
 public interface PresentacionesRepository extends JpaRepository <Presentaciones, Integer> {
     List<Presentaciones> findByDate (LocalDate date);
     List<Presentaciones> findByLocation(String location);
+    List<Presentaciones> findByAssistance (String assistance);
 }//fin

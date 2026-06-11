@@ -10,5 +10,6 @@ import java.util.List;
 public interface EnsayosRepository extends JpaRepository <Ensayos, Integer> {
     List<Ensayos> findByDate(LocalDate date);
     List<Ensayos> findBySection(String section);
+    List<Ensayos> findByAssistance(String assistance);
 
 }

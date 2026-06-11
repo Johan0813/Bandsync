@@ -60,6 +60,14 @@ public class EnsayosService {
         return this.convertirListEnsayosDTO(ensayos);
     }
 
+    public List<EnsayosDTO> findByAssistance (String assistance){
+        List<Ensayos> ensayos = this.ensayosRepository.findByAssistance(assistance);
+        if (ensayos.isEmpty()){
+            throw new RuntimeException("No hay lista de asistencia en este momento");
+        }
+        return this.convertirListEnsayosDTO(ensayos);
+    }
+
     public List<EnsayosDTO> findAll(){
         return this.convertirListEnsayosDTO(this.ensayosRepository.findAll());
     }
