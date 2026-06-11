@@ -34,7 +34,12 @@ public class IntegrantesController {
         }
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(this.service.findAll());
+    }
+
+  @GetMapping("/email/{email}")
     public ResponseEntity<?> findByEmail(@PathVariable String email) {
 
         try {
@@ -127,6 +132,32 @@ public class IntegrantesController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+    @PostMapping
+    public ResponseEntity<?> saveIntegrante (@Validated @RequestBody Integrantes integrante, BindingResult result){
+        if (result.hasErrors()) {
+
+            Map<String, String> errors = new HashMap<>();
+
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        try {
+
+            return ResponseEntity.ok(
+                    this.service.saveIntegrante(integrante));
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editIntegrante(@Validated @RequestBody Integrantes integrante, @PathVariable Integer id, BindingResult result) {
