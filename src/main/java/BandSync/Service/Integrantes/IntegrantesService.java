@@ -2,10 +2,10 @@ package BandSync.Service.Integrantes;
 
 import BandSync.Model.Instrumentos.Instrumentos;
 import BandSync.Model.Integrantes.Integrantes;
-import BandSync.Model.Integrantes.IntegrantesDTO;
 import BandSync.Repository.Instrumentos.InstrumentosRepository;
 import BandSync.Repository.Integrantes.IntegrantesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,17 +21,19 @@ public class IntegrantesService {
     private IntegrantesRepository repositoryInt;
     @Autowired
     private InstrumentosRepository repositoryInst;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public List<IntegrantesDTO> convertirListIntegrantesDTO (List<Integrantes> integrantesList){
-        List<IntegrantesDTO> listDTO= new ArrayList<>();
+    public List<IntegrantesRequestDTO> convertirListIntegrantesDTO (List<Integrantes> integrantesList){
+        List<IntegrantesRequestDTO> listDTO= new ArrayList<>();
         for (Integrantes integrantes: integrantesList){
             listDTO.add(this.convertirIntegrantesDTO(integrantes));
         }
         return listDTO;
     }
 
-    public IntegrantesDTO convertirIntegrantesDTO(Integrantes integrantes ){
-        IntegrantesDTO dto = new IntegrantesDTO();
+    public IntegrantesRequestDTO convertirIntegrantesDTO(Integrantes integrantes ){
+        IntegrantesRequestDTO dto = new IntegrantesRequestDTO();
         dto.setName(integrantes.getName());
         dto.setEmail(integrantes.getEmail());
         dto.setAge(integrantes.getAge());
@@ -47,7 +49,7 @@ public class IntegrantesService {
 
         return dto;
     }
-    public IntegrantesDTO saveIntegrante(Integrantes integrante){
+    public IntegrantesRequestDTO saveIntegrante(Integrantes integrante){
 
         if(this.repositoryInt.findByEmail(integrante.getEmail()) != null){
             throw new RuntimeException("El correo ya se encuentra registrado");
@@ -76,7 +78,7 @@ public class IntegrantesService {
         return this.convertirIntegrantesDTO(this.repositoryInt.save(integrante));
     }
 
-    public List<IntegrantesDTO> findAll (){
+    public List<IntegrantesRequestDTO> findAll (){
         return this.convertirListIntegrantesDTO(this.repositoryInt.findAll());
     }
 
@@ -101,7 +103,7 @@ public class IntegrantesService {
 
     }
 
-    public IntegrantesDTO editIntegrante(Integer id, Integrantes integranteEdit) {
+    public IntegrantesRequestDTO editIntegrante(Integer id, Integrantes integranteEdit) {
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
@@ -159,7 +161,7 @@ public class IntegrantesService {
 
 
 
-    public IntegrantesDTO findById(Integer id){
+    public IntegrantesRequestDTO findById(Integer id){
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
@@ -170,7 +172,7 @@ public class IntegrantesService {
         return this.convertirIntegrantesDTO(optional.get());
     }
 
-    public IntegrantesDTO findByEmail (String email) {
+    public IntegrantesRequestDTO findByEmail (String email) {
         Integrantes integrantes = this.repositoryInt.findByEmail(email);
 
         if (integrantes == null){
@@ -179,7 +181,7 @@ public class IntegrantesService {
         return this.convertirIntegrantesDTO(integrantes);
     }
 
-    public List<IntegrantesDTO> findByType(String type){
+    public List<IntegrantesRequestDTO> findByType(String type){
         List<Integrantes> integrantes = this.repositoryInt.findByType(type);
 
         if (integrantes==null){
@@ -188,7 +190,7 @@ public class IntegrantesService {
         return this.convertirListIntegrantesDTO(integrantes);
     }
 
-    public List<IntegrantesDTO> findBySection (String section){
+    public List<IntegrantesRequestDTO> findBySection (String section){
         List<Integrantes> integrantes = this.repositoryInt.findBySection(section);
 
         if (integrantes.isEmpty()){
@@ -198,7 +200,7 @@ public class IntegrantesService {
         return this.convertirListIntegrantesDTO(integrantes);
     }
 
-    public List<IntegrantesDTO> findByName (String name){
+    public List<IntegrantesRequestDTO> findByName (String name){
         List<Integrantes> integrantes = this.repositoryInt.findByName(name);
 
         if (integrantes.isEmpty()){
@@ -206,7 +208,7 @@ public class IntegrantesService {
         }
         return this.convertirListIntegrantesDTO(integrantes);
     }
-    public List<IntegrantesDTO> findAllByOrderByNameAsc(){
+    public List<IntegrantesRequestDTO> findAllByOrderByNameAsc(){
         List<Integrantes> integrantes = this.repositoryInt.findAllByOrderByNameAsc();
 
         if (integrantes.isEmpty()){
@@ -214,7 +216,7 @@ public class IntegrantesService {
         }
         return this.convertirListIntegrantesDTO(integrantes);
     }
-    public IntegrantesDTO findByEmailAndPassword(String email, String password){
+    public IntegrantesRequestDTO findByEmailAndPassword(String email, String password){
         Integrantes integrantes = this.repositoryInt.findByEmailAndPassword(email, password);
 
         if (integrantes == null) {
