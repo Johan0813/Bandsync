@@ -1,7 +1,6 @@
 package BandSync.Controller.Integrantes;
 
 import BandSync.Model.Integrantes.Integrantes;
-import BandSync.Model.Login.LoginDTO;
 import BandSync.Service.Integrantes.IntegrantesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,36 +102,6 @@ public class IntegrantesController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-    @GetMapping("/{email}/{password}")
-    public ResponseEntity<?> findByEmailAndPassword(@PathVariable String email, @PathVariable String password) {
-
-        try {
-
-            return ResponseEntity.ok(
-                    this.service.findByEmailAndPassword(email, password));
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-
-        try {
-
-            return ResponseEntity.ok(this.service.login(loginDTO.getEmail(), loginDTO.getPassword()
-                    )
-            );
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
-
     @PostMapping
     public ResponseEntity<?> saveIntegrante (@Validated @RequestBody Integrantes integrante, BindingResult result){
         if (result.hasErrors()) {
