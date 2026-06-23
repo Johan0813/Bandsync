@@ -7,11 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface IntegrantesRepository extends JpaRepository <Integrantes, Integer> {
     List<Integrantes> findByName(String name);
 
-    Integrantes findByEmail(String email);
+   Optional<Integrantes> findByEmail(String email);
 
     Integrantes findByEmailAndPassword(String email, String password);
 

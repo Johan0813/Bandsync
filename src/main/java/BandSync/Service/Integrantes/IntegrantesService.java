@@ -59,7 +59,7 @@ public class IntegrantesService {
         );
     }
     public IntegrantesResponseDTO saveIntegrante(Integrantes integrante){
-        if(this.repositoryInt.findByEmail(integrante.getEmail()) != null){
+        if(this.repositoryInt.findByEmail(integrante.getEmail()).isPresent()){
             throw new RuntimeException("El correo ya se encuentra registrado");
         }
         if(!integrante.getType().equalsIgnoreCase("ADMIN")
@@ -125,7 +125,7 @@ public class IntegrantesService {
 
         Integrantes integrante = optional.get();
 
-        if (!integrante.getEmail().equals(integranteEdit.getEmail())&& this.repositoryInt.findByEmail(integranteEdit.getEmail()) != null) {
+        if (!integrante.getEmail().equals(integranteEdit.getEmail())&& this.repositoryInt.findByEmail(integranteEdit.getEmail()).isPresent()) {
             throw new RuntimeException("El correo ya se encuentra registrado");
         }
 
@@ -184,12 +184,12 @@ public class IntegrantesService {
     }
 
     public IntegrantesResponseDTO findByEmail (String email) {
-        Integrantes integrantes = this.repositoryInt.findByEmail(email);
+        Optional <Integrantes> integrantes = this.repositoryInt.findByEmail(email);
 
-        if (integrantes == null){
+        if (integrantes.isEmpty()){
             throw new RuntimeException("El correo no existe");
         }
-        return this.convertirIntegrantesDTO(integrantes);
+        return this.convertirIntegrantesDTO(integrantes.get());
     }
 
     public List<IntegrantesResponseDTO> findByType(String type){
