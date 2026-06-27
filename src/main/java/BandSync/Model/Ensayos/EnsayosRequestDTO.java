@@ -4,21 +4,14 @@ import BandSync.Model.Integrantes.Integrantes;
 
 import java.time.LocalDate;
 
-public class EnsayosDTO {
+public class EnsayosRequestDTO {
 
     private LocalDate date;
     private String section;
     private Integrantes integrante;
     private String assistance;
 
-    public EnsayosDTO() {
-    }
-
-    public EnsayosDTO(LocalDate date, String section, Integrantes integrante, String assistance) {
-        this.date = date;
-        this.section = section;
-        this.integrante = integrante;
-        this.assistance = assistance;
+    public EnsayosRequestDTO() {
     }
 
     public LocalDate getDate() {

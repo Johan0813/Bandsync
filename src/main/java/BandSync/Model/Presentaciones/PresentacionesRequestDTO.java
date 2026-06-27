@@ -2,20 +2,13 @@ package BandSync.Model.Presentaciones;
 
 import java.time.LocalDate;
 
-public class PresentacionesDTO {
+public class PresentacionesRequestDTO {
     private LocalDate date;
     private String location;
     private String integrante;
     private String asistencia;
 
-    public PresentacionesDTO() {
-    }
-
-    public PresentacionesDTO(LocalDate date, String location, String integrante, String asistencia) {
-        this.date = date;
-        this.location = location;
-        this.integrante = integrante;
-        this.asistencia = asistencia;
+    public PresentacionesRequestDTO() {
     }
 
     public LocalDate getDate() {

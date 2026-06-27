@@ -58,23 +58,28 @@ public class IntegrantesService {
                 integrantes.getSection()
         );
     }
-    public IntegrantesResponseDTO saveIntegrante(Integrantes integrante){
-        if(this.repositoryInt.findByEmail(integrante.getEmail()).isPresent()){
+    public IntegrantesResponseDTO saveIntegrante(IntegrantesRequestDTO dto){
+
+        if(this.repositoryInt.findByEmail(dto.getEmail()).isPresent()){
             throw new RuntimeException("El correo ya se encuentra registrado");
         }
-        if(!integrante.getType().equalsIgnoreCase("ADMIN")
-                && integrante.getInstrument() == null){
-            throw new RuntimeException("Debe seleccionar un instrumento");
-        }
 
-        if(integrante.getInstrument() != null){
+        Instrumentos instrumento = null;
 
-            Optional<Instrumentos> optionalInstrumento = this.repositoryInst.findById(integrante.getInstrument().getId());
+        if(!dto.getType().equalsIgnoreCase("ADMIN")){
+
+            if(dto.getInstrumentId() == null){
+                throw new RuntimeException("Debe seleccionar un instrumento");
+            }
+
+            Optional<Instrumentos> optionalInstrumento =
+                    this.repositoryInst.findById(dto.getInstrumentId());
 
             if(optionalInstrumento.isEmpty()){
                 throw new RuntimeException("El instrumento no existe");
             }
-            Instrumentos instrumento = optionalInstrumento.get();
+
+            instrumento = optionalInstrumento.get();
 
             if(instrumento.getQuantity() <= 0){
                 throw new RuntimeException("No hay instrumentos disponibles");
@@ -85,11 +90,9 @@ public class IntegrantesService {
             this.repositoryInst.save(instrumento);
         }
 
-        integrante.setPassword(passwordEncoder.encode(integrante.getPassword()));
-
-        return this.convertirIntegrantesDTO(this.repositoryInt.save(integrante));
+        return this.convertirIntegrantesDTO(
+                this.repositoryInt.save(new Integrantes(dto.getName(), dto.getEmail(), passwordEncoder.encode(dto.getPassword()), dto.getAge(), dto.getType(), instrumento, dto.getSection())));
     }
-
     public List<IntegrantesResponseDTO> findAll (){
         return this.convertirListIntegrantesDTO(this.repositoryInt.findAll());
     }
@@ -115,62 +118,67 @@ public class IntegrantesService {
 
     }
 
-    public IntegrantesResponseDTO editIntegrante(Integer id, Integrantes integranteEdit) {
+    public IntegrantesResponseDTO editIntegrante(Integer id, IntegrantesRequestDTO dto){
 
         Optional<Integrantes> optional = this.repositoryInt.findById(id);
 
-        if (optional.isEmpty()) {
+        if(optional.isEmpty()){
             throw new RuntimeException("El integrante no existe");
         }
 
         Integrantes integrante = optional.get();
 
-        if (!integrante.getEmail().equals(integranteEdit.getEmail())&& this.repositoryInt.findByEmail(integranteEdit.getEmail()).isPresent()) {
+        if(!integrante.getEmail().equals(dto.getEmail()) && this.repositoryInt.findByEmail(dto.getEmail()).isPresent()){
             throw new RuntimeException("El correo ya se encuentra registrado");
         }
 
-        if (!integrante.getType().equalsIgnoreCase("ADMIN") && integranteEdit.getInstrument() == null) {
+        if(!integrante.getType().equalsIgnoreCase("ADMIN") && dto.getInstrumentId() == null){
             throw new RuntimeException("Debe seleccionar un instrumento");
         }
 
-        if (integranteEdit.getInstrument() != null) {
+        if(dto.getInstrumentId() != null){
+
             Instrumentos instrumentoActual = integrante.getInstrument();
-            Instrumentos instrumentoNuevo = integranteEdit.getInstrument();
 
-            Optional<Instrumentos> optionalInstrumento = this.repositoryInst.findById(instrumentoNuevo.getId());
+            Optional<Instrumentos> optionalInstrumento =
+                    this.repositoryInst.findById(dto.getInstrumentId());
 
-            if (optionalInstrumento.isEmpty()) {
+            if(optionalInstrumento.isEmpty()){
                 throw new RuntimeException("El instrumento no existe");
             }
 
             Instrumentos nuevo = optionalInstrumento.get();
 
-            if (instrumentoActual == null || !instrumentoActual.getId().equals(nuevo.getId())) {
-                if (nuevo.getQuantity() <= 0) {
+            if(instrumentoActual == null || !instrumentoActual.getId().equals(nuevo.getId())){
+
+                if(nuevo.getQuantity() <= 0){
                     throw new RuntimeException("No hay instrumentos disponibles");
                 }
 
-                if (instrumentoActual != null) {
+                if(instrumentoActual != null){
 
                     instrumentoActual.setQuantity(instrumentoActual.getQuantity() + 1);
+
                     this.repositoryInst.save(instrumentoActual);
                 }
 
                 nuevo.setQuantity(nuevo.getQuantity() - 1);
+
                 this.repositoryInst.save(nuevo);
+
                 integrante.setInstrument(nuevo);
             }
         }
 
-        integrante.setName(integranteEdit.getName());
-        integrante.setEmail(integranteEdit.getEmail());
-        integrante.setAge(integranteEdit.getAge());
-        integrante.setSection(integranteEdit.getSection());
-        return this.convertirIntegrantesDTO(
-                this.repositoryInt.save(integrante)
-        );
-    }
+        integrante.setName(dto.getName());
+        integrante.setEmail(dto.getEmail());
+        integrante.setAge(dto.getAge());
+        integrante.setSection(dto.getSection());
 
+        this.repositoryInt.save(integrante);
+
+        return this.convertirIntegrantesDTO(integrante);
+    }
 
     public IntegrantesResponseDTO findById(Integer id){
 

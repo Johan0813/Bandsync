@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -30,51 +32,51 @@ public class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
 
-    @Test
-    void loginAdminExitoso(){
+        @Test
+        void loginAdminExitoso(){
 
-        LoginDTO dto = new LoginDTO();
+            LoginDTO dto = new LoginDTO();
 
-        dto.setEmail("admin@bco.or.cr");
+            dto.setEmail("admin@bco.or.cr");
 
-        dto.setPassword("1234");
+            dto.setPassword("1234");
 
-        Integrantes admin = new Integrantes();
+            Integrantes admin = new Integrantes();
 
-        admin.setId(1);
+            admin.setId(1);
 
-        admin.setName("Admin");
+            admin.setName("Admin");
 
-        admin.setEmail("admin@bco.or.cr");
+            admin.setEmail("admin@bco.or.cr");
 
-        admin.setAge(30);
+            admin.setAge(30);
 
-        admin.setType("ADMIN");
+            admin.setType("ADMIN");
 
-        admin.setSection("General");
+            admin.setSection("General");
 
-        when(repositoryInt.findByEmail(
-                dto.getEmail()))
+            when(repositoryInt.findByEmail(
+                    dto.getEmail()))
 
-                .thenReturn(admin);
+                    .thenReturn(Optional.of(admin));
 
-        IntegrantesResponseDTO response =
+            IntegrantesResponseDTO response =
 
-                authService.login(dto);
+                    authService.login(dto);
 
-        assertNotNull(response);
+            assertNotNull(response);
 
-        assertEquals(
-                "Administrador",
-                response.getInstrument()
-        );
+            assertEquals(
+                    "Administrador",
+                    response.getInstrument()
+            );
 
-        verify(authenticationManager)
+            verify(authenticationManager)
 
-                .authenticate(any(
-                        UsernamePasswordAuthenticationToken.class
-                ));
-    }
+                    .authenticate(any(
+                            UsernamePasswordAuthenticationToken.class
+                    ));
+        }
 
     @Test
     void loginIntegranteExitoso(){
@@ -112,7 +114,7 @@ public class AuthServiceTest {
         integrante.setInstrument(instrumento);
 
         when(repositoryInt.findByEmail(
-                dto.getEmail())).thenReturn(integrante);
+                dto.getEmail())).thenReturn(Optional.of(integrante));
 
         IntegrantesResponseDTO response =
 

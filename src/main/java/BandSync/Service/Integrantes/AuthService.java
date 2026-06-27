@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 
 public class AuthService {
@@ -25,15 +27,21 @@ public class AuthService {
     public IntegrantesResponseDTO login(LoginDTO dto){
 
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+                new UsernamePasswordAuthenticationToken(
+                        dto.getEmail(),
+                        dto.getPassword()
+                );
 
         authenticationManager.authenticate(authToken);
 
-        Integrantes integrante = this.repositoryInt.findByEmail(dto.getEmail());
+        Optional<Integrantes> optional =
+                this.repositoryInt.findByEmail(dto.getEmail());
 
-        if(integrante == null){
+        if(optional.isEmpty()){
             throw new RuntimeException("Usuario no encontrado");
         }
+
+        Integrantes integrante = optional.get();
 
         if(integrante.getInstrument() == null){
 

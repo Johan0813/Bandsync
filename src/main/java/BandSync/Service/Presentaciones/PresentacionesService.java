@@ -1,12 +1,8 @@
 package BandSync.Service.Presentaciones;
 
-import BandSync.Model.Ensayos.Ensayos;
-import BandSync.Model.Ensayos.EnsayosDTO;
 import BandSync.Model.Integrantes.Integrantes;
 import BandSync.Model.Presentaciones.Presentaciones;
-import BandSync.Model.Presentaciones.PresentacionesDTO;
-import BandSync.Repository.Ensayos.EnsayosRepository;
-import BandSync.Repository.Instrumentos.InstrumentosRepository;
+import BandSync.Model.Presentaciones.PresentacionesRequestDTO;
 import BandSync.Repository.Integrantes.IntegrantesRepository;
 import BandSync.Repository.Presentaciones.PresentacionesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +23,16 @@ public class PresentacionesService {
     IntegrantesRepository integrantesRepository;
 
     //Convertis
-    public  List<PresentacionesDTO> convertirListPresentacionesDTO (List<Presentaciones> presentacionesList){
-        List<PresentacionesDTO> listDTO= new ArrayList<>();
+    public  List<PresentacionesRequestDTO> convertirListPresentacionesDTO (List<Presentaciones> presentacionesList){
+        List<PresentacionesRequestDTO> listDTO= new ArrayList<>();
         for (Presentaciones presentaciones: presentacionesList){
             listDTO.add(this.convertirPresentacionesDTO(presentaciones));
         }
         return listDTO;
     }
 
-    public PresentacionesDTO convertirPresentacionesDTO (Presentaciones presentaciones){
-        PresentacionesDTO dto= new PresentacionesDTO();
+    public PresentacionesRequestDTO convertirPresentacionesDTO (Presentaciones presentaciones){
+        PresentacionesRequestDTO dto= new PresentacionesRequestDTO();
         dto.setDate(presentaciones.getDate());
         dto.setLocation(presentaciones.getLocation());
         dto.setAsistencia(presentaciones.getAssistance());
@@ -44,7 +40,7 @@ public class PresentacionesService {
     }
 
 
-    public List<PresentacionesDTO> findByDate(LocalDate date){
+    public List<PresentacionesRequestDTO> findByDate(LocalDate date){
         List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
 
         if (presentaciones.isEmpty()){
@@ -53,7 +49,7 @@ public class PresentacionesService {
         return this.convertirListPresentacionesDTO(presentaciones);
     }
 
-    public List<PresentacionesDTO> findByLocation(String location){
+    public List<PresentacionesRequestDTO> findByLocation(String location){
         List<Presentaciones> presentaciones = this.presentacionesRepository.findByLocation(location);
 
         if (presentaciones.isEmpty()){
@@ -62,7 +58,7 @@ public class PresentacionesService {
         return this.convertirListPresentacionesDTO(presentaciones);
     }
 
-    public List<PresentacionesDTO> findByAssistance (String assistance){
+    public List<PresentacionesRequestDTO> findByAssistance (String assistance){
         List<Presentaciones> presentaciones = this.presentacionesRepository.findByAssistance(assistance);
         if (presentaciones.isEmpty()){
             throw new RuntimeException("No hay lista de asistencia en este momento");
@@ -70,7 +66,7 @@ public class PresentacionesService {
         return this.convertirListPresentacionesDTO(presentaciones);
     }
 
-    public List<PresentacionesDTO> findAll(){
+    public List<PresentacionesRequestDTO> findAll(){
         return this.convertirListPresentacionesDTO(this.presentacionesRepository.findAll());
     }
 
@@ -90,7 +86,7 @@ public class PresentacionesService {
         }
 
 
-    public List <PresentacionesDTO> savePresentation (Presentaciones presentaciones){
+    public List <PresentacionesRequestDTO> savePresentation (Presentaciones presentaciones){
         if(!this.presentacionesRepository.findByDate(presentaciones.getDate()).isEmpty()){
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
@@ -98,7 +94,7 @@ public class PresentacionesService {
         if(integrantes.isEmpty()){
             throw new RuntimeException("No existen integrantes registrados");
         }
-    List<PresentacionesDTO> presentacionesCreadas = new ArrayList<>();
+    List<PresentacionesRequestDTO> presentacionesCreadas = new ArrayList<>();
 
     for (Integrantes integrante : integrantes){
         Presentaciones nueva = new Presentaciones();
@@ -114,7 +110,7 @@ public class PresentacionesService {
     }
 
 
-    public List<PresentacionesDTO> editPresentation(Integer id, Presentaciones presentacionesEdit){
+    public List<PresentacionesRequestDTO> editPresentation(Integer id, Presentaciones presentacionesEdit){
 
         Optional<Presentaciones> optional = this.presentacionesRepository.findById(id);
         if(optional.isEmpty()) {
@@ -126,7 +122,7 @@ public class PresentacionesService {
                 throw new RuntimeException("Ya existe una presentacion para esa fecha");
             }
             List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(fechaOriginal);
-            List<PresentacionesDTO> editadas = new ArrayList<>();
+            List<PresentacionesRequestDTO> editadas = new ArrayList<>();
 
             for(Presentaciones presentacion : presentaciones){
 

@@ -1,7 +1,7 @@
 package BandSync.Service.Instrumentos;
 
 import BandSync.Model.Instrumentos.Instrumentos;
-import BandSync.Model.Instrumentos.InstrumentosDTO;
+import BandSync.Model.Instrumentos.InstrumentosRequestDTO;
 import BandSync.Repository.Instrumentos.InstrumentosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class InstrumentosService {
     @Autowired
     private InstrumentosRepository instrumentosRepository;
 
-    public InstrumentosDTO saveInstrumento(Instrumentos instrumento){
+    public InstrumentosRequestDTO saveInstrumento(Instrumentos instrumento){
 
         if (instrumento.getQuantity()<=0){
             throw new RuntimeException("La cantidad debe ser mayor a 0");
@@ -35,12 +35,12 @@ public class InstrumentosService {
         return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
     }
 
-    public List<InstrumentosDTO> findAll(){
+    public List<InstrumentosRequestDTO> findAll(){
         return this.convertListDTO(this.instrumentosRepository.findAll()
         );
     }
 
-    public InstrumentosDTO findById (Integer id){
+    public InstrumentosRequestDTO findById (Integer id){
         Optional<Instrumentos> optional = this.instrumentosRepository.findById(id);
 
         if (optional.isEmpty()){
@@ -49,7 +49,7 @@ public class InstrumentosService {
             return this.convertInstrumentoDTO(optional.get());
     }
 
-    public InstrumentosDTO deleteInstrumento(Integer id, Integer quantity){
+    public InstrumentosRequestDTO deleteInstrumento(Integer id, Integer quantity){
 
         Optional<Instrumentos> optional =
                 this.instrumentosRepository.findById(id);
@@ -71,7 +71,7 @@ public class InstrumentosService {
                 );
 
     }
-    public InstrumentosDTO editInstrumento (Integer id, Instrumentos instrumentoEdit){
+    public InstrumentosRequestDTO editInstrumento (Integer id, Instrumentos instrumentoEdit){
         Optional<Instrumentos> optionalInst = this.instrumentosRepository.findById(id);
 
         if (optionalInst.isEmpty()) {
@@ -86,7 +86,7 @@ public class InstrumentosService {
             return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
         }
 
-    public List<InstrumentosDTO> findByName (String name){
+    public List<InstrumentosRequestDTO> findByName (String name){
         List<Instrumentos> instrumentos = this.instrumentosRepository.findByName(name);
 
         if (instrumentos.isEmpty()){
@@ -96,20 +96,20 @@ public class InstrumentosService {
     }
 
 
-    public InstrumentosDTO convertInstrumentoDTO(
+    public InstrumentosRequestDTO convertInstrumentoDTO(
             Instrumentos instrumento){
 
-        InstrumentosDTO dto = new InstrumentosDTO();
+        InstrumentosRequestDTO dto = new InstrumentosRequestDTO();
 
         dto.setName(instrumento.getName());
         dto.setQuantity(instrumento.getQuantity());
 
         return dto;
     }
-    public List<InstrumentosDTO> convertListDTO(
+    public List<InstrumentosRequestDTO> convertListDTO(
             List<Instrumentos> instrumentos){
 
-        List<InstrumentosDTO> dtoList =
+        List<InstrumentosRequestDTO> dtoList =
                 new ArrayList<>();
 
         for(Instrumentos instrumento : instrumentos){

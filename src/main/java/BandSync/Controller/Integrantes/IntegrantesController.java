@@ -1,6 +1,7 @@
 package BandSync.Controller.Integrantes;
 
 import BandSync.Model.Integrantes.Integrantes;
+import BandSync.Model.Integrantes.IntegrantesRequestDTO;
 import BandSync.Service.Integrantes.IntegrantesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,17 +104,7 @@ public class IntegrantesController {
         }
     }
     @PostMapping
-    public ResponseEntity<?> saveIntegrante (@Validated @RequestBody Integrantes integrante, BindingResult result){
-        if (result.hasErrors()) {
-
-            Map<String, String> errors = new HashMap<>();
-
-            for (FieldError error : result.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-        }
+    public ResponseEntity<?> saveIntegrante (@RequestBody IntegrantesRequestDTO integrante){
 
         try {
 
@@ -129,18 +120,8 @@ public class IntegrantesController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIntegrante(@Validated @RequestBody Integrantes integrante, @PathVariable Integer id, BindingResult result) {
+    public ResponseEntity<?> editIntegrante(@Validated @RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
 
-        if (result.hasErrors()) {
-
-            Map<String, String> errors = new HashMap<>();
-
-            for (FieldError error : result.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-        }
 
         try {
 

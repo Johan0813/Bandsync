@@ -42,9 +42,10 @@ public class Integrantes {
     public Integrantes() {
     }
 
-    public Integrantes(String name, String email, Integer age, String type, Instrumentos instrument, String section) {
+    public Integrantes(String name, String email, String password, Integer age, String type, Instrumentos instrument, String section) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.age = age;
         this.type = type;
         this.instrument = instrument;

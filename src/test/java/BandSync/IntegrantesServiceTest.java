@@ -2,12 +2,12 @@ package BandSync;
 
 import BandSync.Model.Instrumentos.Instrumentos;
 import BandSync.Model.Integrantes.Integrantes;
+import BandSync.Model.Integrantes.IntegrantesRequestDTO;
 import BandSync.Model.Integrantes.IntegrantesResponseDTO;
 import BandSync.Repository.Instrumentos.InstrumentosRepository;
 import BandSync.Repository.Integrantes.IntegrantesRepository;
-
-import BandSync.Service.Integrantes.AuthService;
 import BandSync.Service.Integrantes.IntegrantesService;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +49,7 @@ public class IntegrantesServiceTest {
         admin.setId(1);
         admin.setName("Admin");
         admin.setEmail("admin@bco.or.cr");
-        admin.setAge(25);
+        admin.setAge(30);
         admin.setType("ADMIN");
         admin.setSection("General");
 
@@ -69,14 +70,9 @@ public class IntegrantesServiceTest {
         Instrumentos instrumento = new Instrumentos();
 
         instrumento.setId(1);
-
         instrumento.setName("Trompeta");
 
         Integrantes integrante = new Integrantes();
-
-        integrante.setId(1);
-
-        integrante.setName("Juan");
 
         integrante.setInstrument(instrumento);
 
@@ -94,35 +90,48 @@ public class IntegrantesServiceTest {
     @Test
     void saveIntegranteExitoso(){
 
-        Instrumentos instrumento = new Instrumentos();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
+
+        dto.setName("Juan");
+        dto.setEmail("juan@bco.or.cr");
+        dto.setPassword("Admin123*");
+        dto.setAge(20);
+        dto.setType("INTEGRANTE");
+        dto.setInstrumentId(1);
+        dto.setSection("Bronces");
+
+        Instrumentos instrumento =
+                new Instrumentos();
 
         instrumento.setId(1);
-
+        instrumento.setName("Trompeta");
         instrumento.setQuantity(5);
 
-        Integrantes integrante = new Integrantes();
-
-        integrante.setName("Juan");
-
-        integrante.setEmail("juan@bco.or.cr");
-
-        integrante.setPassword("Admin123*");
-
-        integrante.setType("INTEGRANTE");
-
-        integrante.setInstrument(instrumento);
+        Integrantes integrante =
+                new Integrantes(
+                        dto.getName(),
+                        dto.getEmail(),
+                        "password",
+                        dto.getAge(),
+                        dto.getType(),
+                        instrumento,
+                        dto.getSection()
+                );
 
         when(repositoryInt.findByEmail(
-                integrante.getEmail()))
+                dto.getEmail()))
 
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         when(repositoryInst.findById(1))
 
-                .thenReturn(Optional.of(instrumento));
+                .thenReturn(
+                        Optional.of(instrumento)
+                );
 
         when(passwordEncoder.encode(
-                "Admin123*"))
+                dto.getPassword()))
 
                 .thenReturn("password");
 
@@ -132,7 +141,7 @@ public class IntegrantesServiceTest {
                 .thenReturn(integrante);
 
         IntegrantesResponseDTO response =
-                service.saveIntegrante(integrante);
+                service.saveIntegrante(dto);
 
         assertNotNull(response);
     }
@@ -140,132 +149,101 @@ public class IntegrantesServiceTest {
     @Test
     void saveIntegranteCorreoExistente(){
 
-        Integrantes integrante =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        integrante.setEmail(
-                "juan@bco.or.cr"
-        );
+        dto.setEmail("juan@bco.or.cr");
 
         when(repositoryInt.findByEmail(
-                "juan@bco.or.cr"))
+                dto.getEmail()))
 
-                .thenReturn(integrante);
+                .thenReturn(
+                        Optional.of(
+                                new Integrantes()
+                        )
+                );
 
         assertThrows(
-
                 RuntimeException.class,
-
-                () -> service.saveIntegrante(
-                        integrante
-                )
+                () -> service.saveIntegrante(dto)
         );
     }
 
     @Test
     void saveIntegranteSinInstrumento(){
 
-        Integrantes integrante =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        integrante.setType(
-                "INTEGRANTE"
-        );
+        dto.setType("INTEGRANTE");
 
         when(repositoryInt.findByEmail(
                 anyString()))
 
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         assertThrows(
-
                 RuntimeException.class,
-
-                () -> service.saveIntegrante(
-                        integrante
-                )
+                () -> service.saveIntegrante(dto)
         );
     }
 
     @Test
     void saveIntegranteInstrumentoNoExiste(){
 
-        Instrumentos instrumento =
-                new Instrumentos();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        instrumento.setId(1);
-
-        Integrantes integrante =
-                new Integrantes();
-
-        integrante.setType(
-                "INTEGRANTE"
-        );
-
-        integrante.setInstrument(
-                instrumento
-        );
+        dto.setType("INTEGRANTE");
+        dto.setInstrumentId(1);
 
         when(repositoryInt.findByEmail(
                 anyString()))
 
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         when(repositoryInst.findById(1))
 
                 .thenReturn(Optional.empty());
 
         assertThrows(
-
                 RuntimeException.class,
-
-                () -> service.saveIntegrante(
-                        integrante
-                )
+                () -> service.saveIntegrante(dto)
         );
     }
 
     @Test
     void saveIntegranteSinCantidad(){
 
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
+
+        dto.setType("INTEGRANTE");
+        dto.setInstrumentId(1);
+
         Instrumentos instrumento =
                 new Instrumentos();
 
         instrumento.setId(1);
-
         instrumento.setQuantity(0);
-
-        Integrantes integrante =
-                new Integrantes();
-
-        integrante.setType(
-                "INTEGRANTE"
-        );
-
-        integrante.setInstrument(
-                instrumento
-        );
 
         when(repositoryInt.findByEmail(
                 anyString()))
 
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         when(repositoryInst.findById(1))
 
-                .thenReturn(Optional.of(
-                        instrumento
-                ));
+                .thenReturn(
+                        Optional.of(instrumento)
+                );
 
         assertThrows(
-
                 RuntimeException.class,
-
-                () -> service.saveIntegrante(
-                        integrante
-                )
+                () -> service.saveIntegrante(dto)
         );
     }
+
     @Test
     void findAllExitoso(){
 
@@ -274,8 +252,6 @@ public class IntegrantesServiceTest {
 
         Integrantes integrante =
                 new Integrantes();
-
-        integrante.setId(1);
 
         integrante.setType("ADMIN");
 
@@ -286,14 +262,15 @@ public class IntegrantesServiceTest {
                 .thenReturn(integrantes);
 
         List<IntegrantesResponseDTO> response =
-
                 service.findAll();
 
         assertFalse(response.isEmpty());
 
-        assertEquals(1,response.size());
+        assertEquals(
+                1,
+                response.size()
+        );
     }
-
     @Test
     void deleteIntegranteExitoso(){
 
@@ -373,24 +350,22 @@ public class IntegrantesServiceTest {
                 actual
         );
 
-        Integrantes editar =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        editar.setName("Juan");
+        dto.setName("Juan");
 
-        editar.setEmail(
+        dto.setEmail(
                 "nuevo@bco.or.cr"
         );
 
-        editar.setAge(20);
+        dto.setAge(20);
 
-        editar.setSection(
+        dto.setSection(
                 "Bronces"
         );
 
-        editar.setInstrument(
-                nuevo
-        );
+        dto.setInstrumentId(2);
 
         when(repositoryInt.findById(1))
 
@@ -401,7 +376,9 @@ public class IntegrantesServiceTest {
         when(repositoryInt.findByEmail(
                 "nuevo@bco.or.cr"))
 
-                .thenReturn(null);
+                .thenReturn(
+                        Optional.empty()
+                );
 
         when(repositoryInst.findById(2))
 
@@ -418,7 +395,7 @@ public class IntegrantesServiceTest {
 
                 service.editIntegrante(
                         1,
-                        editar
+                        dto
                 );
 
         assertNotNull(response);
@@ -427,8 +404,8 @@ public class IntegrantesServiceTest {
     @Test
     void editIntegranteNoExiste(){
 
-        Integrantes editar =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
         when(repositoryInt.findById(1))
 
@@ -442,7 +419,7 @@ public class IntegrantesServiceTest {
 
                 () -> service.editIntegrante(
                         1,
-                        editar
+                        dto
                 )
         );
     }
@@ -465,10 +442,10 @@ public class IntegrantesServiceTest {
                 new Instrumentos()
         );
 
-        Integrantes editar =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        editar.setEmail(
+        dto.setEmail(
                 "b@bco.or.cr"
         );
 
@@ -482,7 +459,9 @@ public class IntegrantesServiceTest {
                 "b@bco.or.cr"))
 
                 .thenReturn(
-                        new Integrantes()
+                        Optional.of(
+                                new Integrantes()
+                        )
                 );
 
         assertThrows(
@@ -491,7 +470,7 @@ public class IntegrantesServiceTest {
 
                 () -> service.editIntegrante(
                         1,
-                        editar
+                        dto
                 )
         );
     }
@@ -510,10 +489,10 @@ public class IntegrantesServiceTest {
                 "INTEGRANTE"
         );
 
-        Integrantes editar =
-                new Integrantes();
+        IntegrantesRequestDTO dto =
+                new IntegrantesRequestDTO();
 
-        editar.setEmail(
+        dto.setEmail(
                 "a@bco.or.cr"
         );
 
@@ -529,10 +508,11 @@ public class IntegrantesServiceTest {
 
                 () -> service.editIntegrante(
                         1,
-                        editar
+                        dto
                 )
         );
     }
+
     @Test
     void findByIdExitoso(){
 
@@ -572,7 +552,6 @@ public class IntegrantesServiceTest {
                 () -> service.findById(1)
         );
     }
-
     @Test
     void findByEmailExitoso(){
 
@@ -584,7 +563,9 @@ public class IntegrantesServiceTest {
         when(repositoryInt.findByEmail(
                 "admin@bco.or.cr"))
 
-                .thenReturn(integrante);
+                .thenReturn(
+                        Optional.of(integrante)
+                );
 
         IntegrantesResponseDTO response =
 
@@ -601,7 +582,9 @@ public class IntegrantesServiceTest {
         when(repositoryInt.findByEmail(
                 "admin@bco.or.cr"))
 
-                .thenReturn(null);
+                .thenReturn(
+                        Optional.empty()
+                );
 
         assertThrows(
 

@@ -1,6 +1,7 @@
 package BandSync.Repository.Integrantes;
 
 import BandSync.Model.Integrantes.Integrantes;
+import BandSync.Model.Integrantes.IntegrantesResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ public interface IntegrantesRepository extends JpaRepository <Integrantes, Integ
 
    Optional<Integrantes> findByEmail(String email);
 
-    Integrantes findByEmailAndPassword(String email, String password);
+    Optional<Integrantes> findByEmailAndPassword(String email, String password);
 
     List<Integrantes> findByType(String type);
 
@@ -30,7 +31,7 @@ public interface IntegrantesRepository extends JpaRepository <Integrantes, Integ
     List<Integrantes> buscarSection(@Param("section") String section);
 
     @Query("SELECT i FROM Integrantes i WHERE i.email = :email AND i.password = :password")
-    Integrantes verificarCredenciales(
+    Optional<Integrantes> verificarCredenciales(
             @Param("email") String email,
             @Param("password") String password
     );

@@ -1,7 +1,7 @@
 package BandSync.Controller.Instrumentos;
 
 import BandSync.Model.Instrumentos.Instrumentos;
-import BandSync.Model.Instrumentos.InstrumentosDTO;
+import BandSync.Model.Instrumentos.InstrumentosRequestDTO;
 import BandSync.Service.Instrumentos.InstrumentosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class InstrumentosController {
 
         try{
 
-            InstrumentosDTO dto = this.service.saveInstrumento(instrumento);
+            InstrumentosRequestDTO dto = this.service.saveInstrumento(instrumento);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
