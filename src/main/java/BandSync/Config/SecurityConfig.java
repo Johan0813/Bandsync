@@ -5,65 +5,156 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
+
 import org.springframework.security.authentication.AuthenticationManager;
-
 import org.springframework.security.config.Customizer;
-
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-
 public class SecurityConfig {
 
-@Autowired
-
-private CustomIntegrantesDetailsService customIntegrantesDetailsService;
+    @Autowired
+    private CustomIntegrantesDetailsService customIntegrantesDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
-
-            throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration
+    ) throws Exception {
 
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
 
-            throws Exception {
-
-        http.csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/integrantes/login")
+                        // LOGIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/login"
+                        )
                         .permitAll()
 
-                        .requestMatchers("/api/instrumentos/**")
-                        .hasRole("ADMIN")
-
-                        .requestMatchers("/api/integrantes/**")
-                        .hasRole("ADMIN")
-
-                        .requestMatchers("/api/ensayos/**")
+                        // ENSAYOS - CONSULTAR
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/ensayos/**"
+                        )
                         .authenticated()
 
-                        .requestMatchers("/api/presentaciones/**")
+                        // ENSAYOS - ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/ensayos/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/ensayos/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/ensayos/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        // PRESENTACIONES - CONSULTAR
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/presentaciones/**"
+                        )
+                        .permitAll()
+
+                        // PRESENTACIONES - ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/presentaciones/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/presentaciones/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/presentaciones/**"
+                        )
+                        .hasRole("ADMIN")
+
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/instrumentos/**"
+                                )
+                                .authenticated()
+
+
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/api/instrumentos/**"
+                                )
+                                .hasRole("ADMIN")
+
+                                .requestMatchers(
+                                        HttpMethod.PUT,
+                                        "/api/instrumentos/**"
+                                )
+                                .hasRole("ADMIN")
+
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/api/instrumentos/**"
+                                )
+                                .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/integrantes/**"
+                        )
                         .authenticated()
+
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/integrantes/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/integrantes/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/integrantes/**"
+                        )
+                        .hasRole("ADMIN")
+
 
                         .anyRequest()
                         .authenticated()
