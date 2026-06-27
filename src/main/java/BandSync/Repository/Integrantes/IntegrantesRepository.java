@@ -16,8 +16,6 @@ public interface IntegrantesRepository extends JpaRepository <Integrantes, Integ
 
    Optional<Integrantes> findByEmail(String email);
 
-    Optional<Integrantes> findByEmailAndPassword(String email, String password);
-
     List<Integrantes> findByType(String type);
 
     List<Integrantes> findBySection(String section);

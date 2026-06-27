@@ -2,6 +2,7 @@ package BandSync.Service.Instrumentos;
 
 import BandSync.Model.Instrumentos.Instrumentos;
 import BandSync.Model.Instrumentos.InstrumentosRequestDTO;
+import BandSync.Model.Instrumentos.InstrumentosResponseDTO;
 import BandSync.Repository.Instrumentos.InstrumentosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,106 +17,128 @@ public class InstrumentosService {
     @Autowired
     private InstrumentosRepository instrumentosRepository;
 
-    public InstrumentosRequestDTO saveInstrumento(Instrumentos instrumento){
+    public InstrumentosResponseDTO saveInstrumento(InstrumentosRequestDTO dto){
 
-        if (instrumento.getQuantity()<=0){
+        if(dto.getQuantity() <= 0){
             throw new RuntimeException("La cantidad debe ser mayor a 0");
         }
-        List<Instrumentos> instrumentos = this.instrumentosRepository.findByName(instrumento.getName());
+
+        List<Instrumentos> instrumentos =
+                this.instrumentosRepository.findByName(dto.getName());
 
         if(!instrumentos.isEmpty()){
 
             Instrumentos existente = instrumentos.get(0);
 
-            existente.setQuantity(existente.getQuantity() + instrumento.getQuantity());
+            existente.setQuantity(
+                    existente.getQuantity() + dto.getQuantity()
+            );
 
-            return this.convertInstrumentoDTO(this.instrumentosRepository.save(existente));
+            return this.convertInstrumentoDTO(
+                    this.instrumentosRepository.save(existente)
+            );
         }
 
-        return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
+        return this.convertInstrumentoDTO(
+                this.instrumentosRepository.save(new Instrumentos(dto.getName(), dto.getQuantity())));
     }
 
-    public List<InstrumentosRequestDTO> findAll(){
-        return this.convertListDTO(this.instrumentosRepository.findAll()
+    public List<InstrumentosResponseDTO> findAll(){
+        return this.convertListDTO(
+                this.instrumentosRepository.findAll()
         );
     }
 
-    public InstrumentosRequestDTO findById (Integer id){
-        Optional<Instrumentos> optional = this.instrumentosRepository.findById(id);
-
-        if (optional.isEmpty()){
-            throw new RuntimeException("El instrumento no existe");
-        }
-            return this.convertInstrumentoDTO(optional.get());
-    }
-
-    public InstrumentosRequestDTO deleteInstrumento(Integer id, Integer quantity){
+    public InstrumentosResponseDTO findById(Integer id){
 
         Optional<Instrumentos> optional =
                 this.instrumentosRepository.findById(id);
 
-        if(optional.isEmpty()) {
+        if(optional.isEmpty()){
             throw new RuntimeException("El instrumento no existe");
         }
-            Instrumentos instrumento = optional.get();
 
-            if(quantity > instrumento.getQuantity()) {
-                throw new RuntimeException("No hay suficiente cantidad disponible");
-            }
-                instrumento.setQuantity(
-                        instrumento.getQuantity() - quantity
-                );
-
-                return this.convertInstrumentoDTO(
-                        this.instrumentosRepository.save(instrumento)
-                );
-
+        return this.convertInstrumentoDTO(optional.get());
     }
-    public InstrumentosRequestDTO editInstrumento (Integer id, Instrumentos instrumentoEdit){
-        Optional<Instrumentos> optionalInst = this.instrumentosRepository.findById(id);
 
-        if (optionalInst.isEmpty()) {
+    public InstrumentosResponseDTO deleteInstrumento(Integer id, Integer quantity){
+
+        Optional<Instrumentos> optional =
+                this.instrumentosRepository.findById(id);
+
+        if(optional.isEmpty()){
             throw new RuntimeException("El instrumento no existe");
         }
-            if (instrumentoEdit.getQuantity()<0){
-                throw new RuntimeException("La cantidad no puede ser negativa");
-            }
-            Instrumentos instrumento = optionalInst.get();
-            instrumento.setQuantity(instrumentoEdit.getQuantity());
 
-            return this.convertInstrumentoDTO(this.instrumentosRepository.save(instrumento));
+        Instrumentos instrumento = optional.get();
+
+        if(quantity > instrumento.getQuantity()){
+            throw new RuntimeException("No hay suficiente cantidad disponible");
         }
 
-    public List<InstrumentosRequestDTO> findByName (String name){
-        List<Instrumentos> instrumentos = this.instrumentosRepository.findByName(name);
+        instrumento.setQuantity(
+                instrumento.getQuantity() - quantity
+        );
 
-        if (instrumentos.isEmpty()){
+        return this.convertInstrumentoDTO(
+                this.instrumentosRepository.save(instrumento)
+        );
+    }
+
+    public InstrumentosResponseDTO editInstrumento(Integer id, InstrumentosRequestDTO dto){
+
+        Optional<Instrumentos> optionalInst =
+                this.instrumentosRepository.findById(id);
+
+        if(optionalInst.isEmpty()){
+            throw new RuntimeException("El instrumento no existe");
+        }
+
+        if(dto.getQuantity() < 0){
+            throw new RuntimeException("La cantidad no puede ser negativa");
+        }
+
+        Instrumentos instrumento = optionalInst.get();
+
+        instrumento.setQuantity(dto.getQuantity());
+
+        return this.convertInstrumentoDTO(
+                this.instrumentosRepository.save(instrumento)
+        );
+    }
+
+    public List<InstrumentosResponseDTO> findByName(String name){
+
+        List<Instrumentos> instrumentos =
+                this.instrumentosRepository.findByName(name);
+
+        if(instrumentos.isEmpty()){
             throw new RuntimeException("No existe instrumento con ese nombre");
         }
+
         return this.convertListDTO(instrumentos);
     }
 
-
-    public InstrumentosRequestDTO convertInstrumentoDTO(
+    public InstrumentosResponseDTO convertInstrumentoDTO(
             Instrumentos instrumento){
 
-        InstrumentosRequestDTO dto = new InstrumentosRequestDTO();
-
-        dto.setName(instrumento.getName());
-        dto.setQuantity(instrumento.getQuantity());
-
-        return dto;
+        return new InstrumentosResponseDTO(
+                instrumento.getId(),
+                instrumento.getName(),
+                instrumento.getQuantity()
+        );
     }
-    public List<InstrumentosRequestDTO> convertListDTO(
+
+    public List<InstrumentosResponseDTO> convertListDTO(
             List<Instrumentos> instrumentos){
 
-        List<InstrumentosRequestDTO> dtoList =
+        List<InstrumentosResponseDTO> dtoList =
                 new ArrayList<>();
 
         for(Instrumentos instrumento : instrumentos){
 
             dtoList.add(
-                    convertInstrumentoDTO(instrumento)
+                    this.convertInstrumentoDTO(instrumento)
             );
         }
 

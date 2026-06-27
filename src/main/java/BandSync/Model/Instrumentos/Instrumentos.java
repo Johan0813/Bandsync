@@ -19,7 +19,7 @@ public class Instrumentos {
     public Instrumentos() {
     }
 
-    public Instrumentos(String name, String condition, Integer quantity) {
+    public Instrumentos(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
     }

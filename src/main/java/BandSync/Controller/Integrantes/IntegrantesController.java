@@ -120,7 +120,7 @@ public class IntegrantesController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIntegrante(@Validated @RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
+    public ResponseEntity<?> editIntegrante(@RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
 
 
         try {

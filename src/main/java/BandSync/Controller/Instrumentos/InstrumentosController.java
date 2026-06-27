@@ -1,13 +1,10 @@
 package BandSync.Controller.Instrumentos;
 
-import BandSync.Model.Instrumentos.Instrumentos;
 import BandSync.Model.Instrumentos.InstrumentosRequestDTO;
 import BandSync.Service.Instrumentos.InstrumentosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,24 +20,10 @@ public class InstrumentosController {
     private InstrumentosService service;
 
     @PostMapping
-    public ResponseEntity<?> saveInstrumento(@Validated @RequestBody Instrumentos instrumento, BindingResult result){
-
-        if(result.hasErrors()){
-
-            Map<String, String> errors = new HashMap<>();
-
-            for(FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-        }
+    public ResponseEntity<?> saveInstrumento(@RequestBody InstrumentosRequestDTO instrumento){
 
         try{
-
-            InstrumentosRequestDTO dto = this.service.saveInstrumento(instrumento);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveInstrumento(instrumento));
 
         }catch(RuntimeException e){
 
@@ -75,20 +58,7 @@ public class InstrumentosController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> editInstrumento(
-            @Validated @RequestBody Instrumentos instrumento,
-            BindingResult result,
-            @PathVariable Integer id){
-
-        if(result.hasErrors()){
-
-            Map<String, String> errors = new HashMap<>();
-
-            for(FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-        }
+            @Validated @RequestBody InstrumentosRequestDTO instrumento, @PathVariable Integer id){
 
         try{
 
