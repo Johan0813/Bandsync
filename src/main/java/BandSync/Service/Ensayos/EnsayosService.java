@@ -34,7 +34,7 @@ public class EnsayosService {
     }
 
     public EnsayosResponseDTO convertirEnsayosDTO(Ensayos ensayos){
-        return new EnsayosResponseDTO(ensayos.getId(), ensayos.getDate(), ensayos.getAssistance(), ensayos.getIntegrante().getName(), ensayos.getIntegrante().getId(), ensayos.getSection());
+        return new EnsayosResponseDTO(ensayos.getId(), ensayos.getDate(), ensayos.getSection(), ensayos.getIntegrante().getName(), ensayos.getIntegrante().getId(), ensayos.getAssistance());
     }
 
     public List<EnsayosResponseDTO> findByDate(LocalDate date){

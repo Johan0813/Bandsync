@@ -29,7 +29,7 @@ public class Ensayos {
         this.date = date;
         this.section = section;
         this.integrante = integrante;
-        this.assistance = this.assistance;
+        this.assistance = assistance;
     }
 
     public Integer getId() {

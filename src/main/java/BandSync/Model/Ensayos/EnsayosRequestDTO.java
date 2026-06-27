@@ -41,6 +41,6 @@ public class EnsayosRequestDTO {
     }
 
     public void setAssistance(String assistance) {
-        this.assistance = this.assistance;
+        this.assistance = assistance;
     }
 }
