@@ -1,20 +1,13 @@
 package BandSync.Controller.Ensayos;
 
-import BandSync.Model.Ensayos.Ensayos;
+import BandSync.Model.Ensayos.EnsayosRequestDTO;
 import BandSync.Service.Ensayos.EnsayosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Binding;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequestMapping("api/ensayos")
 @RestController
@@ -23,22 +16,15 @@ public class EnsayosController {
 @Autowired
     EnsayosService ensayosService;
 //para guardar
-    @PostMapping("save")
-    public ResponseEntity<?> saveEnsayo (@Validated @RequestBody Ensayos ensayos, BindingResult result){
-        if (result.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return  ResponseEntity.badRequest().body(errors);
-        }
+    @PostMapping
+    public ResponseEntity<?> saveEnsayo (@RequestBody EnsayosRequestDTO ensayos){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(this.ensayosService.saveEnsayo(ensayos));
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("all")
+    @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(
                 this.ensayosService.findAll()
@@ -75,9 +61,9 @@ public class EnsayosController {
     }
 
     @GetMapping("/asistencia/{asistencia}")
-            public ResponseEntity<?> findByAsistencia(@PathVariable String asistencia){
+            public ResponseEntity<?> findByAssistance(@PathVariable String assistance){
             try {
-                return ResponseEntity.ok(this.ensayosService.findByAssistance(asistencia));
+                return ResponseEntity.ok(this.ensayosService.findByAssistance(assistance));
             }catch (RuntimeException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
@@ -94,18 +80,10 @@ public class EnsayosController {
           }
         }
     @PutMapping("/{id}")
-    public ResponseEntity<?> editEnsayo(@PathVariable Integer id, @Validated @RequestBody Ensayos ensayo, BindingResult result){
-        if (result.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
-        }
+    public ResponseEntity<?> editEnsayo(@PathVariable Integer id, @RequestBody EnsayosRequestDTO ensayo){
+
         try {
-            return ResponseEntity.ok(
-                    this.ensayosService.editEnsayo(id, ensayo)
-            );
+            return ResponseEntity.ok(this.ensayosService.editEnsayo(id, ensayo));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

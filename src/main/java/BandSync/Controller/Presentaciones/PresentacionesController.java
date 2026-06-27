@@ -1,13 +1,11 @@
 package BandSync.Controller.Presentaciones;
 
 import BandSync.Model.Presentaciones.Presentaciones;
+import BandSync.Model.Presentaciones.PresentacionesRequestDTO;
 import BandSync.Service.Presentaciones.PresentacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,15 +20,9 @@ public class PresentacionesController {
     PresentacionesService presentacionesService;
 
 
-    @PostMapping("save")
-    public ResponseEntity<?> savePresentation(@Validated @RequestBody Presentaciones presentacion, BindingResult result){
-        if(result.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for(FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
-        }
+    @PostMapping
+    public ResponseEntity<?> savePresentation(@RequestBody PresentacionesRequestDTO presentacion){
+
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(this.presentacionesService.savePresentation(presentacion));
 
@@ -39,7 +31,7 @@ public class PresentacionesController {
         }
     }
 
-    @GetMapping("all")
+    @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(
                 this.presentacionesService.findAll()
@@ -97,14 +89,7 @@ public class PresentacionesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editPresentation(@PathVariable Integer id, @Validated @RequestBody Presentaciones presentacion, BindingResult result){
-        if(result.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for(FieldError error : result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
-        }
+    public ResponseEntity<?> editPresentation(@PathVariable Integer id, @RequestBody PresentacionesRequestDTO presentacion){
         try{
             return ResponseEntity.ok(
                     this.presentacionesService.editPresentation(id, presentacion)
