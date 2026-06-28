@@ -105,7 +105,7 @@ public class EnsayosServiceTest {
                 .thenReturn(List.of(ensayo));
 
         List<EnsayosResponseDTO> lista =
-                ensayosService.findByDate(LocalDate.now());
+                ensayosService.findByDate(LocalDateTime.now());
 
         assertEquals(1, lista.size());
     }
@@ -118,7 +118,7 @@ public class EnsayosServiceTest {
 
         assertThrows(
                 RuntimeException.class,
-                () -> ensayosService.findByDate(LocalDate.now())
+                () -> ensayosService.findByDate(LocalDateTime.now())
         );
     }
 

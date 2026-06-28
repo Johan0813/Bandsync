@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("api/presentaciones")
@@ -46,7 +47,7 @@ public class PresentacionesController {
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<?> findByDate(@PathVariable LocalDate date){
+    public ResponseEntity<?> findByDate(@PathVariable LocalDateTime date){
         try{
             return ResponseEntity.ok(this.presentacionesService.findByDate(date)
             );

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RequestMapping("api/ensayos")
 @RestController
@@ -41,7 +42,7 @@ public class EnsayosController {
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<?> findByDate(@PathVariable LocalDate date){
+    public ResponseEntity<?> findByDate(@PathVariable LocalDateTime date){
         try{
             return ResponseEntity.ok(this.ensayosService.findByDate(date));
         }catch (RuntimeException e){
@@ -60,7 +61,7 @@ public class EnsayosController {
         }
     }
 
-    @GetMapping("/asistencia/{asistencia}")
+    @GetMapping("/assistance/{assistance}")
             public ResponseEntity<?> findByAssistance(@PathVariable String assistance){
             try {
                 return ResponseEntity.ok(this.ensayosService.findByAssistance(assistance));
