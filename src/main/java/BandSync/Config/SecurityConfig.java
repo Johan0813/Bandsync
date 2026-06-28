@@ -59,98 +59,82 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/ensayos/**"
-                        )
-                        .permitAll()
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/ensayos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/ensayos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/ensayos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/presentaciones/**"
-                        )
-                        .permitAll()
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/presentaciones/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/presentaciones/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/presentaciones/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/instrumentos/**"
-                        )
-                        .permitAll()
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/instrumentos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/instrumentos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/instrumentos/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/integrantes/**"
-                        )
-                        .permitAll()
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/integrantes/**"
-                        )
-                        .permitAll()
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/integrantes/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/integrantes/**"
-                        )
-                        .hasRole("ADMIN")
+                        ).hasRole("ADMIN")
 
                         .anyRequest()
                         .authenticated()
@@ -167,8 +151,11 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(
-                List.of("*")
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://127.0.0.1:5500",
+                        "http://localhost:5500"
+                )
         );
 
         configuration.setAllowedMethods(
@@ -185,7 +172,7 @@ public class SecurityConfig {
                 List.of("*")
         );
 
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();

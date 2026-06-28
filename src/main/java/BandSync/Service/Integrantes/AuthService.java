@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-
 public class AuthService {
 
     @Autowired
@@ -32,7 +33,12 @@ public class AuthService {
                         dto.getPassword()
                 );
 
-        authenticationManager.authenticate(authToken);
+        Authentication authentication =
+                authenticationManager.authenticate(authToken);
+
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(authentication);
 
         Optional<Integrantes> optional =
                 this.repositoryInt.findByEmail(dto.getEmail());
