@@ -1,6 +1,5 @@
 package BandSync.Controller.Presentaciones;
 
-import BandSync.Model.Presentaciones.Presentaciones;
 import BandSync.Model.Presentaciones.PresentacionesRequestDTO;
 import BandSync.Service.Presentaciones.PresentacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/presentaciones")
