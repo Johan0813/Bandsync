@@ -46,21 +46,15 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // LOGIN
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/auth/login"
-                        )
+                        .requestMatchers("/api/auth/login")
                         .permitAll()
 
-                        // ENSAYOS - CONSULTAR
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/ensayos/**"
                         )
                         .authenticated()
 
-                        // ENSAYOS - ADMIN
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/ensayos/**"
@@ -79,14 +73,12 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                        // PRESENTACIONES - CONSULTAR
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/presentaciones/**"
                         )
                         .permitAll()
 
-                        // PRESENTACIONES - ADMIN
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/presentaciones/**"
@@ -105,30 +97,29 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                                .requestMatchers(
-                                        HttpMethod.GET,
-                                        "/api/instrumentos/**"
-                                )
-                                .authenticated()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/instrumentos/**"
+                        )
+                        .authenticated()
 
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/instrumentos/**"
+                        )
+                        .hasRole("ADMIN")
 
-                                .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/api/instrumentos/**"
-                                )
-                                .hasRole("ADMIN")
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/instrumentos/**"
+                        )
+                        .hasRole("ADMIN")
 
-                                .requestMatchers(
-                                        HttpMethod.PUT,
-                                        "/api/instrumentos/**"
-                                )
-                                .hasRole("ADMIN")
-
-                                .requestMatchers(
-                                        HttpMethod.DELETE,
-                                        "/api/instrumentos/**"
-                                )
-                                .hasRole("ADMIN")
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/instrumentos/**"
+                        )
+                        .hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -136,7 +127,6 @@ public class SecurityConfig {
                         )
                         .authenticated()
 
-
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/integrantes/**"
@@ -154,7 +144,6 @@ public class SecurityConfig {
                                 "/api/integrantes/**"
                         )
                         .hasRole("ADMIN")
-
 
                         .anyRequest()
                         .authenticated()
