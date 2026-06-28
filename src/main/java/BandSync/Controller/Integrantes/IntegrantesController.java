@@ -104,7 +104,7 @@ public class IntegrantesController {
         }
     }
     @PostMapping
-    public ResponseEntity<?> saveIntegrante (@RequestBody IntegrantesRequestDTO integrante){
+    public ResponseEntity<?> saveIntegrante (@Validated @RequestBody IntegrantesRequestDTO integrante){
 
         try {
 
@@ -120,7 +120,7 @@ public class IntegrantesController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIntegrante(@RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
+    public ResponseEntity<?> editIntegrante(@Validated @RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
 
 
         try {

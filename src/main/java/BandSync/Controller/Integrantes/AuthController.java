@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto){
+    public ResponseEntity<?> login(@Validated @RequestBody LoginDTO dto){
 
         try{
 
