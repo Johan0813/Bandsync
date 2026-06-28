@@ -104,33 +104,52 @@ public class IntegrantesController {
         }
     }
     @PostMapping
-    public ResponseEntity<?> saveIntegrante (@Validated @RequestBody IntegrantesRequestDTO integrante){
+    public ResponseEntity<?> saveIntegrante (@Validated @RequestBody IntegrantesRequestDTO integrante, BindingResult result){
+        {
+            if (result.hasErrors()) {
+                Map<String, String> errores = new HashMap<>();
 
-        try {
+                for (FieldError error : result.getFieldErrors()) {
+                    errores.put(error.getField(), error.getDefaultMessage());
+                }
 
-            return ResponseEntity.ok(
-                    this.service.saveIntegrante(integrante));
+                return ResponseEntity.badRequest().body(errores);
+            }
 
-        } catch (RuntimeException e) {
+            try {
 
-            return ResponseEntity.badRequest().body(e.getMessage());
+                return ResponseEntity.ok(
+                        this.service.saveIntegrante(integrante));
+
+            } catch (RuntimeException e) {
+
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
-
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIntegrante(@Validated @RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id) {
+    public ResponseEntity<?> editIntegrante(@Validated @RequestBody IntegrantesRequestDTO integrante, @PathVariable Integer id, BindingResult result) {
+        {
+            if (result.hasErrors()) {
+                Map<String, String> errores = new HashMap<>();
 
+                for (FieldError error : result.getFieldErrors()) {
+                    errores.put(error.getField(), error.getDefaultMessage());
+                }
 
-        try {
+                return ResponseEntity.badRequest().body(errores);
+            }
+            try {
 
-            return ResponseEntity.ok(
-                    this.service.editIntegrante(id, integrante));
+                return ResponseEntity.ok(
+                        this.service.editIntegrante(id, integrante));
 
-        } catch (RuntimeException e) {
+            } catch (RuntimeException e) {
 
-            return ResponseEntity.badRequest().body(e.getMessage());
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
 
     }
