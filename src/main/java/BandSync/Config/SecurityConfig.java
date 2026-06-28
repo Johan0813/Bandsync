@@ -104,7 +104,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/instrumentos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.PUT,
