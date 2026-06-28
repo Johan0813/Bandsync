@@ -64,17 +64,17 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/ensayos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/ensayos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/ensayos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -84,17 +84,17 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/presentaciones/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/presentaciones/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/presentaciones/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -109,12 +109,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/instrumentos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/instrumentos/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -129,12 +129,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/integrantes/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/integrantes/**"
-                        ).hasRole("ADMIN")
+                        ).permitAll()
 
                         .anyRequest()
                         .authenticated()
