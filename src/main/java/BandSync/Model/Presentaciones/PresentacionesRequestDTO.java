@@ -1,9 +1,9 @@
 package BandSync.Model.Presentaciones;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PresentacionesRequestDTO {
-    private LocalDate date;
+    private LocalDateTime date;
     private String location;
     private String integrante;
     private String asistencia;
@@ -11,11 +11,11 @@ public class PresentacionesRequestDTO {
     public PresentacionesRequestDTO() {
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

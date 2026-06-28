@@ -3,10 +3,11 @@ package BandSync.Model.Ensayos;
 import BandSync.Model.Integrantes.Integrantes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EnsayosRequestDTO {
 
-    private LocalDate date;
+    private LocalDateTime date;
     private String section;
     private Integrantes integrante;
     private String assistance;
@@ -14,11 +15,11 @@ public class EnsayosRequestDTO {
     public EnsayosRequestDTO() {
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

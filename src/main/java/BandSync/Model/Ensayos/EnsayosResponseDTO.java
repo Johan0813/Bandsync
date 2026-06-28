@@ -1,11 +1,12 @@
 package BandSync.Model.Ensayos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EnsayosResponseDTO {
 
     private Integer id;
-    private LocalDate date;
+    private LocalDateTime date;
     private String section;
     private String integrante;
     private Integer integranteId;
@@ -14,7 +15,7 @@ public class EnsayosResponseDTO {
     public EnsayosResponseDTO() {
     }
 
-    public EnsayosResponseDTO(Integer id, LocalDate date, String section, String integrante, Integer integranteId, String assistance) {
+    public EnsayosResponseDTO(Integer id, LocalDateTime date, String section, String integrante, Integer integranteId, String assistance) {
         this.id = id;
         this.date = date;
         this.section = section;
@@ -27,7 +28,7 @@ public class EnsayosResponseDTO {
         return id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

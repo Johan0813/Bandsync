@@ -16,10 +16,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -45,7 +47,7 @@ public class PresentacionesServiceTest {
 
         Presentaciones presentacion = new Presentaciones();
         presentacion.setId(1);
-        presentacion.setDate(LocalDate.now());
+        presentacion.setDate(LocalDateTime.now());
         presentacion.setLocation("Puntarenas");
         presentacion.setAssistance("Presente");
         presentacion.setIntegrante(integrante);
@@ -113,7 +115,7 @@ public class PresentacionesServiceTest {
         PresentacionesRequestDTO dto =
                 new PresentacionesRequestDTO();
 
-        dto.setDate(LocalDate.of(2026,1,1));
+        dto.setDate(LocalDateTime.of(2026,1,1,9,0));
         dto.setLocation("Puntarenas");
         dto.setAsistencia("Pendiente");
 
@@ -152,7 +154,7 @@ public class PresentacionesServiceTest {
         PresentacionesRequestDTO dto =
                 new PresentacionesRequestDTO();
 
-        dto.setDate(LocalDate.now());
+        dto.setDate(LocalDateTime.now());
 
         when(presentacionesRepository.findByDate(dto.getDate()))
                 .thenReturn(List.of(new Presentaciones()));
@@ -169,7 +171,7 @@ public class PresentacionesServiceTest {
         PresentacionesRequestDTO dto =
                 new PresentacionesRequestDTO();
 
-        dto.setDate(LocalDate.now());
+        dto.setDate(LocalDateTime.now());
 
         when(presentacionesRepository.findByDate(dto.getDate()))
                 .thenReturn(new ArrayList<>());
@@ -189,7 +191,7 @@ public class PresentacionesServiceTest {
         Presentaciones presentacion =
                 new Presentaciones();
 
-        presentacion.setDate(LocalDate.now());
+        presentacion.setDate(LocalDateTime.now());
 
         when(presentacionesRepository.findById(1))
                 .thenReturn(Optional.of(presentacion));
@@ -217,8 +219,8 @@ public class PresentacionesServiceTest {
     @Test
     void editPresentationExitoso(){
 
-        LocalDate fecha =
-                LocalDate.of(2026,1,1);
+        LocalDateTime fecha =
+                LocalDateTime.of(2026,1,1,9,2);
 
         Presentaciones presentacion =
                 new Presentaciones();
@@ -289,8 +291,7 @@ public class PresentacionesServiceTest {
 
         assertFalse(
                 presentacionesService.findByDate(
-                        LocalDate.now()
-                ).isEmpty()
+                        LocalDateTime.of(2021,12,4,2,2)).isEmpty()
         );
     }
 

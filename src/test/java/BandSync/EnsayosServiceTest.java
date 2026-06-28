@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class EnsayosServiceTest {
 
         Ensayos ensayo = new Ensayos();
         ensayo.setId(1);
-        ensayo.setDate(LocalDate.of(2026, 1, 1));
+        ensayo.setDate(LocalDateTime.of(2026, 1, 1, 9, 7));
         ensayo.setAssistance("Presente");
         ensayo.setSection("Bronces");
         ensayo.setIntegrante(integrante);
@@ -212,7 +213,7 @@ public class EnsayosServiceTest {
         EnsayosRequestDTO dto =
                 new EnsayosRequestDTO();
 
-        dto.setDate(LocalDate.of(2026,1,1));
+        dto.setDate(LocalDateTime.of(2026,1,1,5,3));
         dto.setSection("Bronces");
         dto.setAssistance("Pendiente");
 
@@ -257,7 +258,7 @@ public class EnsayosServiceTest {
         EnsayosRequestDTO dto =
                 new EnsayosRequestDTO();
 
-        dto.setDate(LocalDate.of(2026,1,1));
+        dto.setDate(LocalDateTime.of(2026,1,1,6,0,9));
 
         Ensayos ensayo =
                 new Ensayos();
@@ -278,14 +279,14 @@ public class EnsayosServiceTest {
                 new Ensayos();
 
         ensayo.setDate(
-                LocalDate.of(2026,1,1)
+                LocalDateTime.of(2026,1,1,0,0)
         );
 
         when(ensayosRepository.findById(1))
                 .thenReturn(Optional.of(ensayo));
 
         when(ensayosRepository.findByDate(
-                LocalDate.of(2026,1,1)))
+                LocalDateTime.of(2026,1,1,0,0)))
                 .thenReturn(List.of(ensayo));
 
         ensayosService.deleteEnsayo(1);
@@ -313,7 +314,7 @@ public class EnsayosServiceTest {
                 new EnsayosRequestDTO();
 
         dto.setDate(
-                LocalDate.of(2026,1,1)
+                LocalDateTime.of(2026,1,1,1,0,4)
         );
 
         dto.setSection("Bronces");
@@ -333,7 +334,7 @@ public class EnsayosServiceTest {
         ensayo.setId(1);
 
         ensayo.setDate(
-                LocalDate.of(2025,1,1)
+                LocalDateTime.of(2025,1,1,4,0,0)
         );
 
         ensayo.setSection("Vieja");
@@ -346,11 +347,11 @@ public class EnsayosServiceTest {
                 .thenReturn(Optional.of(ensayo));
 
         when(ensayosRepository.findByDate(
-                LocalDate.of(2025,1,1)))
+                LocalDateTime.of(2025,1,1,9,0,0)))
                 .thenReturn(List.of(ensayo));
 
         when(ensayosRepository.findByDate(
-                LocalDate.of(2026,1,1)))
+                LocalDateTime.of(2026,1,1,0,0,0)))
                 .thenReturn(new ArrayList<>());
 
         when(ensayosRepository.save(any()))
@@ -397,14 +398,14 @@ public class EnsayosServiceTest {
                 new EnsayosRequestDTO();
 
         dto.setDate(
-                LocalDate.of(2026,1,1)
+                LocalDateTime.of(2026,1,1,8,0,0)
         );
 
         Ensayos ensayoOriginal =
                 new Ensayos();
 
         ensayoOriginal.setDate(
-                LocalDate.of(2025,1,1)
+                LocalDateTime.of(2025,1,1,9,0,0)
         );
 
         when(ensayosRepository.findById(1))
@@ -413,7 +414,7 @@ public class EnsayosServiceTest {
                 );
 
         when(ensayosRepository.findByDate(
-                LocalDate.of(2026,1,1)))
+                LocalDateTime.of(2026,1,1,9,0,0)))
                 .thenReturn(
                         List.of(new Ensayos())
                 );

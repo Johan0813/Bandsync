@@ -9,7 +9,7 @@ import BandSync.Repository.Presentaciones.PresentacionesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class PresentacionesService {
     }
 
 
-    public List<PresentacionesResponseDTO> findByDate(LocalDate date){
+    public List<PresentacionesResponseDTO> findByDate(LocalDateTime date){
         List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
 
         if (presentaciones.isEmpty()){
@@ -73,14 +73,14 @@ public class PresentacionesService {
         if (optional.isEmpty()) {
             throw new RuntimeException("La presentacion no existe");
         }
-            LocalDate date = optional.get().getDate();
+        LocalDateTime date = optional.get().getDate();
 
-            List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
+        List<Presentaciones> presentaciones = this.presentacionesRepository.findByDate(date);
 
-            for (Presentaciones presentacion : presentaciones){
-                this.presentacionesRepository.delete(presentacion);
-            }
+        for (Presentaciones presentacion : presentaciones){
+            this.presentacionesRepository.delete(presentacion);
         }
+    }
 
 
     public List<PresentacionesResponseDTO> savePresentation(PresentacionesRequestDTO dto){
@@ -117,7 +117,7 @@ public class PresentacionesService {
             throw new RuntimeException("La presentacion no existe");
         }
 
-        LocalDate fechaOriginal = optional.get().getDate();
+        LocalDateTime fechaOriginal = optional.get().getDate();
 
         if(!fechaOriginal.equals(presentacionesEdit.getDate()) && ! this.presentacionesRepository.findByDate(presentacionesEdit.getDate()).isEmpty()){
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
@@ -146,8 +146,8 @@ public class PresentacionesService {
         if(presentacion.isEmpty()) {
             throw new RuntimeException("La presentacion no existe");
         }
-            return this.convertirPresentacionesDTO(presentacion.get());
-        }
+        return this.convertirPresentacionesDTO(presentacion.get());
+    }
 
 
 

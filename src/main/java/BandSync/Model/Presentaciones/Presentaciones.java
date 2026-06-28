@@ -4,8 +4,9 @@ import BandSync.Model.Integrantes.Integrantes;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    @Entity
+@Entity
     @Table(name = "tb_presentaciones")
     public class Presentaciones {
 
@@ -15,7 +16,7 @@ import java.time.LocalDate;
         private Integer id;
 
         @Column(name = "fecha", nullable = false)
-        private LocalDate date;
+        private LocalDateTime date;
 
         @Column(name = "ubicacion", nullable = false, length = 100)
         private String location;
@@ -30,7 +31,7 @@ import java.time.LocalDate;
         public Presentaciones() {
         }
 
-        public Presentaciones(LocalDate date, String location, Integrantes integrante, String assistance) {
+        public Presentaciones(LocalDateTime date, String location, Integrantes integrante, String assistance) {
             this.date = date;
             this.location = location;
             this.integrante = integrante;
@@ -45,11 +46,11 @@ import java.time.LocalDate;
             this.id = id;
         }
 
-        public LocalDate getDate() {
+        public LocalDateTime getDate() {
             return date;
         }
 
-        public void setDate(LocalDate date) {
+        public void setDate(LocalDateTime date) {
             this.date = date;
         }
 
