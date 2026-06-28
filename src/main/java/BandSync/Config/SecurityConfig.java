@@ -131,7 +131,7 @@ public class SecurityConfig {
                                 HttpMethod.POST,
                                 "/api/integrantes/**"
                         )
-                        .hasRole("ADMIN")
+                        .permitAll()
 
                         .requestMatchers(
                                 HttpMethod.PUT,
