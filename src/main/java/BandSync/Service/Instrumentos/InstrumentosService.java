@@ -24,23 +24,34 @@ public class InstrumentosService {
         }
 
         List<Instrumentos> instrumentos =
-                this.instrumentosRepository.findByName(dto.getName());
+                this.instrumentosRepository.findAll();
 
-        if(!instrumentos.isEmpty()){
+        for(Instrumentos instrumento : instrumentos){
 
-            Instrumentos existente = instrumentos.get(0);
+            if(
+                    instrumento.getName()
+                            .trim()
+                            .equalsIgnoreCase(
+                                    dto.getName().trim()
+                            )
+            ){
 
-            existente.setQuantity(
-                    existente.getQuantity() + dto.getQuantity()
-            );
+                instrumento.setQuantity(
+                        instrumento.getQuantity()
+                                + dto.getQuantity()
+                );
 
-            return this.convertInstrumentoDTO(
-                    this.instrumentosRepository.save(existente)
-            );
+                return this.convertInstrumentoDTO(
+                        this.instrumentosRepository.save(instrumento)
+                );
+            }
         }
 
-        return this.convertInstrumentoDTO(
-                this.instrumentosRepository.save(new Instrumentos(dto.getName(), dto.getQuantity())));
+        Instrumentos nuevo =
+                new Instrumentos(dto.getName(), dto.getQuantity()
+                );
+
+        return this.convertInstrumentoDTO(this.instrumentosRepository.save(nuevo));
     }
 
     public List<InstrumentosResponseDTO> findAll(){
