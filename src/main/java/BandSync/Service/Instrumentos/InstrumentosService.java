@@ -19,8 +19,8 @@ public class InstrumentosService {
 
     public InstrumentosResponseDTO saveInstrumento(InstrumentosRequestDTO dto){
 
-        if(dto.getQuantity() <= 0){
-            throw new RuntimeException("La cantidad debe ser mayor a 0");
+        if(dto.getQuantity() < 0){
+            throw new RuntimeException("La cantidad no puede ser negativa");
         }
 
         List<Instrumentos> instrumentos =
