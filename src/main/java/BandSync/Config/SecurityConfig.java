@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 HttpMethod.GET,
                                 "/api/ensayos/**"
                         )
-                        .authenticated()
+                        .permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
@@ -101,7 +101,7 @@ public class SecurityConfig {
                                 HttpMethod.GET,
                                 "/api/instrumentos/**"
                         )
-                        .authenticated()
+                        .permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
@@ -125,7 +125,7 @@ public class SecurityConfig {
                                 HttpMethod.GET,
                                 "/api/integrantes/**"
                         )
-                        .authenticated()
+                        .permitAll()
 
                         .requestMatchers(
                                 HttpMethod.POST,
