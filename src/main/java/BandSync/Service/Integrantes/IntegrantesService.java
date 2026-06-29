@@ -71,6 +71,9 @@ public class IntegrantesService {
             if(dto.getInstrumentId() == null){
                 throw new RuntimeException("Debe seleccionar un instrumento");
             }
+            if(dto.getPassword() == null || dto.getPassword().isEmpty()){
+                throw new RuntimeException("La contraseña es obligatoria");
+            }
 
             Optional<Instrumentos> optionalInstrumento =
                     this.repositoryInst.findById(dto.getInstrumentId());
