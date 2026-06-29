@@ -107,29 +107,40 @@ public class EnsayosService {
 
         if(dto.getSection().equalsIgnoreCase("GENERAL")){
 
-            integrantes = this.integrantesRepository.findAll();
+            integrantes =
+                    this.integrantesRepository.findByType("INTEGRANTE");
 
         }else{
 
-            integrantes = this.integrantesRepository.findBySection(dto.getSection());
+            integrantes =
+                    this.integrantesRepository.findBySection(dto.getSection());
         }
 
         if(integrantes.isEmpty()){
             throw new RuntimeException("No existen integrantes para esa sección");
         }
 
-        List<EnsayosResponseDTO> ensayosCreados = new ArrayList<>();
+        List<EnsayosResponseDTO> ensayosCreados =
+                new ArrayList<>();
 
         for(Integrantes integrante : integrantes){
+
+            if(integrante.getType().equalsIgnoreCase("ADMIN")){
+                continue;
+            }
 
             Ensayos nuevo = new Ensayos();
 
             nuevo.setDate(dto.getDate());
+
             nuevo.setSection(dto.getSection());
+
             nuevo.setIntegrante(integrante);
+
             nuevo.setAssistance("PENDIENTE");
 
-            Ensayos guardado = this.ensayosRepository.save(nuevo);
+            Ensayos guardado =
+                    this.ensayosRepository.save(nuevo);
 
             ensayosCreados.add(
                     this.convertirEnsayosDTO(guardado)
@@ -138,6 +149,7 @@ public class EnsayosService {
 
         return ensayosCreados;
     }
+
 
     public List<EnsayosResponseDTO> editEnsayo(Integer id, EnsayosRequestDTO dto){
 
@@ -148,23 +160,60 @@ public class EnsayosService {
             throw new RuntimeException("El ensayo no existe");
         }
 
-        LocalDateTime fechaYaEstablecida = optional.get().getDate();
+        LocalDateTime fechaVieja =
+                optional.get().getDate();
 
-        if(!fechaYaEstablecida.equals(dto.getDate()) && !this.ensayosRepository.findByDate(dto.getDate()).isEmpty()){
-            throw new RuntimeException("Ya existe un ensayo en esta fecha!");
+        if(
+                !fechaVieja.equals(dto.getDate())
+                        &&
+                        !this.ensayosRepository.findByDate(dto.getDate()).isEmpty()
+        ){
+            throw new RuntimeException(
+                    "Ya existe un ensayo en esta fecha!"
+            );
         }
 
-        List<Ensayos> ensayos =
-                this.ensayosRepository.findByDate(fechaYaEstablecida);
+        List<Ensayos> ensayosViejos =
+                this.ensayosRepository.findByDate(fechaVieja);
+        for(Ensayos ensayo : ensayosViejos){
+            this.ensayosRepository.delete(ensayo);
+        }
+
+        List<Integrantes> integrantes;
+
+        if(dto.getSection().equalsIgnoreCase("GENERAL")){
+
+            integrantes = this.integrantesRepository.findByType("INTEGRANTE");
+
+        }else{
+
+            integrantes = this.integrantesRepository.findBySection(dto.getSection());
+        }
+
+        if(integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes para esa sección");
+        }
 
         List<EnsayosResponseDTO> editados = new ArrayList<>();
 
-        for(Ensayos ensayo : ensayos){
+        for(Integrantes integrante : integrantes){
 
-            ensayo.setDate(dto.getDate());
-            ensayo.setSection(dto.getSection());
+            if(integrante.getType().equalsIgnoreCase("ADMIN")
+            ){
+                continue;
+            }
 
-            Ensayos guardado = this.ensayosRepository.save(ensayo);
+            Ensayos nuevo = new Ensayos();
+
+            nuevo.setDate(dto.getDate());
+
+            nuevo.setSection(dto.getSection());
+
+            nuevo.setIntegrante(integrante);
+
+            nuevo.setAssistance("PENDIENTE");
+
+            Ensayos guardado = this.ensayosRepository.save(nuevo);
 
             editados.add(this.convertirEnsayosDTO(guardado));
         }
