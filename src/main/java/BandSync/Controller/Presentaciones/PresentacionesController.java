@@ -67,13 +67,14 @@ public class PresentacionesController {
 
     @GetMapping ("/assistance/{assistance}")
 
-    public ResponseEntity<?> findByAsisstance (@PathVariable String assistance){
+    public ResponseEntity<?> findByAssistance (@PathVariable String assistance){
         try {
             return ResponseEntity.ok(this.presentacionesService.findByAssistance(assistance));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePresentation(@PathVariable Integer id){
@@ -95,6 +96,15 @@ public class PresentacionesController {
 
         }catch(RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/assistance/{assistance}")
+    public ResponseEntity<?> cambiarAsistencia(@PathVariable Integer id, @PathVariable String estado){
+        try{
+            return ResponseEntity.ok(this.presentacionesService.cambiarAsistencia(id, estado));
+        }catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

@@ -15,13 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -117,7 +115,7 @@ public class PresentacionesServiceTest {
 
         dto.setDate(LocalDateTime.of(2026,1,1,9,0));
         dto.setLocation("Puntarenas");
-        dto.setAsistencia("Pendiente");
+        dto.setAsisstance("Pendiente");
 
         Integrantes integrante =
                 new Integrantes();
@@ -232,7 +230,7 @@ public class PresentacionesServiceTest {
 
         dto.setDate(fecha);
         dto.setLocation("San José");
-        dto.setAsistencia("Presente");
+        dto.setAsisstance("Presente");
 
         Integrantes integrante =
                 new Integrantes();
