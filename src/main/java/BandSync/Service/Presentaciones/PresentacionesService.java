@@ -101,14 +101,12 @@ public class PresentacionesService {
     public List<PresentacionesResponseDTO> savePresentation(PresentacionesRequestDTO dto){
 
         if(!this.presentacionesRepository.findByDate(dto.getDate()).isEmpty()){
-
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
 
-        List<Integrantes> integrantes = this.integrantesRepository.findAll();
+        List<Integrantes> integrantes = this.integrantesRepository.findByType("INTEGRANTE");
 
         if(integrantes.isEmpty()){
-
             throw new RuntimeException("No existen integrantes registrados");
         }
 
@@ -116,7 +114,18 @@ public class PresentacionesService {
 
         for(Integrantes integrante : integrantes){
 
-            Presentaciones guardada = this.presentacionesRepository.save(new Presentaciones(dto.getDate(), dto.getLocation(), integrante, "PENDIENTE"));
+            if(integrante.getType().equalsIgnoreCase("ADMIN")){
+                continue;
+            }
+
+            Presentaciones nueva = new Presentaciones();
+
+            nueva.setDate(dto.getDate());
+            nueva.setLocation(dto.getLocation());
+            nueva.setIntegrante(integrante);
+            nueva.setAssistance("PENDIENTE");
+
+            Presentaciones guardada = this.presentacionesRepository.save(nueva);
 
             presentacionesCreadas.add(this.convertirPresentacionesDTO(guardada));
         }
