@@ -104,7 +104,10 @@ public class PresentacionesService {
             throw new RuntimeException("Ya existe una presentacion para esa fecha");
         }
 
-        List<Integrantes> integrantes = this.integrantesRepository.findByType("INTEGRANTE");
+        List<Integrantes> integrantes =
+                this.integrantesRepository.findAll();
+
+        integrantes.removeIf(integrante -> integrante.getType().equalsIgnoreCase("ADMIN"));
 
         if(integrantes.isEmpty()){
             throw new RuntimeException("No existen integrantes registrados");
@@ -113,10 +116,6 @@ public class PresentacionesService {
         List<PresentacionesResponseDTO> presentacionesCreadas = new ArrayList<>();
 
         for(Integrantes integrante : integrantes){
-
-            if(integrante.getType().equalsIgnoreCase("ADMIN")){
-                continue;
-            }
 
             Presentaciones nueva = new Presentaciones();
 
