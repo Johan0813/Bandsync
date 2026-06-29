@@ -64,6 +64,20 @@ public class IntegrantesService {
             throw new RuntimeException("El correo ya se encuentra registrado");
         }
 
+        if(dto.getPassword() == null || dto.getPassword().isEmpty()){
+            throw new RuntimeException("La contraseña es obligatoria");
+        }
+
+        if(dto.getPassword().length() < 8){
+            throw new RuntimeException("La contraseña debe tener mínimo 8 caracteres");
+        }
+
+        if(!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#_-]).{8,}$")){
+            throw new RuntimeException(
+                    "La contraseña debe tener mayúsculas, minúsculas, números y símbolos"
+            );
+        }
+
         Instrumentos instrumento = null;
 
         if(!dto.getType().equalsIgnoreCase("ADMIN")){
@@ -71,12 +85,8 @@ public class IntegrantesService {
             if(dto.getInstrumentId() == null){
                 throw new RuntimeException("Debe seleccionar un instrumento");
             }
-            if(dto.getPassword() == null || dto.getPassword().isEmpty()){
-                throw new RuntimeException("La contraseña es obligatoria");
-            }
 
-            Optional<Instrumentos> optionalInstrumento =
-                    this.repositoryInst.findById(dto.getInstrumentId());
+            Optional<Instrumentos> optionalInstrumento = this.repositoryInst.findById(dto.getInstrumentId());
 
             if(optionalInstrumento.isEmpty()){
                 throw new RuntimeException("El instrumento no existe");
@@ -93,8 +103,9 @@ public class IntegrantesService {
             this.repositoryInst.save(instrumento);
         }
 
-        return this.convertirIntegrantesDTO(
-                this.repositoryInt.save(new Integrantes(dto.getName(), dto.getEmail(), passwordEncoder.encode(dto.getPassword()), dto.getAge(), dto.getType(), instrumento, dto.getSection())));
+        Integrantes integrante = new Integrantes(dto.getName(), dto.getEmail(), passwordEncoder.encode(dto.getPassword()), dto.getAge(), dto.getType(), instrumento, dto.getSection());
+
+        return this.convertirIntegrantesDTO(this.repositoryInt.save(integrante));
     }
     public List<IntegrantesResponseDTO> findAll (){
         return this.convertirListIntegrantesDTO(this.repositoryInt.findAll());

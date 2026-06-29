@@ -29,11 +29,7 @@ public class IntegrantesRequestDTO {
     @NotBlank(message = "La sección es obligatoria")
     private String section;
 
-    @Size(min = 8, message = "La contraseña debe tener mínimo 8 caracteres")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#_-]).{8,}$",
-            message = "La contraseña debe tener mayúsculas, minúsculas, números y símbolos"
-    )
+
     private String password;
 
     public IntegrantesRequestDTO() {
