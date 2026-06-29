@@ -103,26 +103,36 @@ public class EnsayosService {
             throw new RuntimeException("Ya existe un ensayo para esta fecha!");
         }
 
-        List<Integrantes> integrantes =
-                this.integrantesRepository.findAll();
+        List<Integrantes> integrantes;
 
-        List<EnsayosResponseDTO> ensayosCreados =
-                new ArrayList<>();
+        if(dto.getSection().equalsIgnoreCase("GENERAL")){
+
+            integrantes = this.integrantesRepository.findAll();
+
+        }else{
+
+            integrantes = this.integrantesRepository.findBySection(dto.getSection());
+        }
+
+        if(integrantes.isEmpty()){
+            throw new RuntimeException("No existen integrantes para esa sección");
+        }
+
+        List<EnsayosResponseDTO> ensayosCreados = new ArrayList<>();
 
         for(Integrantes integrante : integrantes){
 
             Ensayos nuevo = new Ensayos();
 
             nuevo.setDate(dto.getDate());
-            nuevo.setAssistance(dto.getAssistance());
             nuevo.setSection(dto.getSection());
             nuevo.setIntegrante(integrante);
+            nuevo.setAssistance("PENDIENTE");
 
-            Ensayos agendado =
-                    this.ensayosRepository.save(nuevo);
+            Ensayos guardado = this.ensayosRepository.save(nuevo);
 
             ensayosCreados.add(
-                    this.convertirEnsayosDTO(agendado)
+                    this.convertirEnsayosDTO(guardado)
             );
         }
 
@@ -141,27 +151,22 @@ public class EnsayosService {
         LocalDateTime fechaYaEstablecida = optional.get().getDate();
 
         if(!fechaYaEstablecida.equals(dto.getDate()) && !this.ensayosRepository.findByDate(dto.getDate()).isEmpty()){
-
             throw new RuntimeException("Ya existe un ensayo en esta fecha!");
         }
 
-        List<Ensayos> ensayos = this.ensayosRepository.findByDate(fechaYaEstablecida);
+        List<Ensayos> ensayos =
+                this.ensayosRepository.findByDate(fechaYaEstablecida);
 
-        List<EnsayosResponseDTO> editados =
-                new ArrayList<>();
+        List<EnsayosResponseDTO> editados = new ArrayList<>();
 
         for(Ensayos ensayo : ensayos){
 
             ensayo.setDate(dto.getDate());
             ensayo.setSection(dto.getSection());
-            ensayo.setAssistance(dto.getAssistance());
 
-            Ensayos agendado =
-                    this.ensayosRepository.save(ensayo);
+            Ensayos guardado = this.ensayosRepository.save(ensayo);
 
-            editados.add(
-                    this.convertirEnsayosDTO(agendado)
-            );
+            editados.add(this.convertirEnsayosDTO(guardado));
         }
 
         return editados;
@@ -180,5 +185,18 @@ public class EnsayosService {
                 ensayo.get()
         );
     }
+    public EnsayosResponseDTO cambiarAsistencia(Integer id, String asistencia){
 
+        Optional<Ensayos> optional = this.ensayosRepository.findById(id);
+
+        if(optional.isEmpty()){
+            throw new RuntimeException("El ensayo no existe");
+        }
+
+        Ensayos ensayo = optional.get();
+
+        ensayo.setAssistance(asistencia);
+
+        return this.convertirEnsayosDTO(this.ensayosRepository.save(ensayo));
+    }
 }

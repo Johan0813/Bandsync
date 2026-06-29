@@ -100,9 +100,9 @@ public class PresentacionesController {
     }
 
     @PutMapping("/{id}/assistance/{assistance}")
-    public ResponseEntity<?> cambiarAsistencia(@PathVariable Integer id, @PathVariable String estado){
+    public ResponseEntity<?> cambiarAsistencia(@PathVariable Integer id, @PathVariable String assistance){
         try{
-            return ResponseEntity.ok(this.presentacionesService.cambiarAsistencia(id, estado));
+            return ResponseEntity.ok(this.presentacionesService.cambiarAsistencia(id, assistance));
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

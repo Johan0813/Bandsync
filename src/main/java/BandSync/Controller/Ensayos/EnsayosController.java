@@ -89,6 +89,16 @@ public class EnsayosController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    @PutMapping("/{id}/assistance/{assistance}")
+    public ResponseEntity<?> cambiarAsistencia(@PathVariable Integer id, @PathVariable String assistance){
 
+        try{
+            return ResponseEntity.ok(this.ensayosService.cambiarAsistencia(id, assistance));
+
+        }catch(RuntimeException e){
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }// Fin clase
