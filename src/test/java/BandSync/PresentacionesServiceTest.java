@@ -115,7 +115,6 @@ public class PresentacionesServiceTest {
 
         dto.setDate(LocalDateTime.of(2026,1,1,9,0));
         dto.setLocation("Puntarenas");
-        dto.setAsisstance("Pendiente");
 
         Integrantes integrante =
                 new Integrantes();
@@ -230,7 +229,6 @@ public class PresentacionesServiceTest {
 
         dto.setDate(fecha);
         dto.setLocation("San José");
-        dto.setAsisstance("Presente");
 
         Integrantes integrante =
                 new Integrantes();
