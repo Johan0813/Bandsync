@@ -215,7 +215,6 @@ public class EnsayosServiceTest {
 
         dto.setDate(LocalDateTime.of(2026,1,1,5,3));
         dto.setSection("Bronces");
-        dto.setAssistance("Pendiente");
 
         Integrantes integrante =
                 new Integrantes();
@@ -319,7 +318,6 @@ public class EnsayosServiceTest {
 
         dto.setSection("Bronces");
 
-        dto.setAssistance("Presente");
 
         Integrantes integrante =
                 new Integrantes();
